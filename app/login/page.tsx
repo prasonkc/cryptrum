@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,16 +10,22 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 export default function Login() {
+  const [isLogin, setIsLogin] = useState<boolean>(true);
   return (
     <main className="flex justify-center items-center min-h-screen">
-      <Card className="w-full max-w-sm bg-gray-900 shadow-2xl shadow-gray-700 outline-blue-400 outline-1">
+      <Card className="w-full max-w-sm bg-gray-900 outline-1">
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Login or Sign Upto your account</CardTitle>
           <CardAction>
-            <Button variant="link" className="cursor-pointer">
-              Sign Up
+            <Button
+              variant="link"
+              className="cursor-pointer"
+              onClick={() => setIsLogin(!isLogin)}
+            >
+              {!isLogin ? "Login" : "Signup"}
             </Button>
           </CardAction>
         </CardHeader>
@@ -26,6 +33,17 @@ export default function Login() {
           <form>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
+                {!isLogin && (
+                  <div className="grid gap-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      type="text"
+                      placeholder="Your Username"
+                      required
+                    />
+                  </div>
+                )}
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -50,15 +68,11 @@ export default function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button
-            type="submit"
-            className="w-full cursor-pointer"
-            variant={"ghost"}
-          >
-            Login
+          <Button type="submit" className="w-full cursor-pointer">
+            {!isLogin? "Signup": "Login"}
           </Button>
           <Button className="w-full cursor-pointer" variant={"outline"}>
-            Login with Google
+            {!isLogin? "Signup with Google" :"Login with Google"}
           </Button>
         </CardFooter>
       </Card>
