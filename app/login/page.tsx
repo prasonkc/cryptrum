@@ -11,14 +11,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { Toaster } from "@/components/ui/sonner"
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState<boolean>(true);
+
+  const error = useSelector((state: RootState) => state.error.value)
+  const dispatch = useDispatch<AppDispatch>();
+
   return (
     <main className="flex justify-center items-center min-h-screen">
-      <Card className="w-full max-w-sm bg-gray-900 outline-1">
+    {error && (
+        <Toaster />
+    )}
+    
+      <Card className="w-full max-w-sm bg-secondary outline-1">
         <CardHeader>
-          <CardTitle>Login or Sign Upto your account</CardTitle>
+          <CardTitle>Login or Sign Up</CardTitle>
           <CardAction>
             <Button
               variant="link"
@@ -68,7 +79,7 @@ export default function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full cursor-pointer">
+          <Button type="submit" className="w-full cursor-pointer hover:border-b border-white">
             {!isLogin? "Signup": "Login"}
           </Button>
           <Button className="w-full cursor-pointer" variant={"outline"}>

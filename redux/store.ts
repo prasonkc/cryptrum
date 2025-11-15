@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counter from "./slice/counterSlice"
+import error from "./slice/ErrorSlice"
 
 export const store = configureStore({
   reducer: {
-    counter
+    counter,
+    error
   },
 })
 
