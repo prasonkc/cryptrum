@@ -11,22 +11,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Toaster } from "@/components/ui/sonner"
-import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import {  AppDispatch } from "@/redux/store";
+import { setError } from "@/redux/slice/ErrorSlice";
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
-  const error = useSelector((state: RootState) => state.error.value)
   const dispatch = useDispatch<AppDispatch>();
 
   return (
     <main className="flex justify-center items-center min-h-screen">
-    {error && (
-        <Toaster />
-    )}
-    
       <Card className="w-full max-w-sm bg-secondary outline-1">
         <CardHeader>
           <CardTitle>Login or Sign Up</CardTitle>
@@ -34,7 +29,9 @@ export default function Login() {
             <Button
               variant="link"
               className="cursor-pointer"
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin);
+              }}
             >
               {!isLogin ? "Login" : "Signup"}
             </Button>
@@ -79,11 +76,18 @@ export default function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full cursor-pointer hover:border-b border-white">
-            {!isLogin? "Signup": "Login"}
+          <Button
+            type="submit"
+            className="w-full cursor-pointer hover:border-b border-white"
+            // ------------------------only for testing---------------------------
+            onClick={() => {
+              dispatch(setError("Login clicked"));
+            }}
+          >
+            {!isLogin ? "Signup" : "Login"}
           </Button>
           <Button className="w-full cursor-pointer" variant={"outline"}>
-            {!isLogin? "Signup with Google" :"Login with Google"}
+            {!isLogin ? "Signup with Google" : "Login with Google"}
           </Button>
         </CardFooter>
       </Card>
