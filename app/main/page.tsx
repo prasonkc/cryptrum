@@ -82,8 +82,8 @@ const LandingPage = () => {
 
         <RetroGrid 
         angle={70}
-        cellSize={50}
-        opacity={0.6}
+        cellSize={100}
+        opacity={0.3}
         lightLineColor="#64748b"
         darkLineColor="#475569"
       />
