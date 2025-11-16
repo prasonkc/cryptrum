@@ -12,6 +12,7 @@ import { MagneticButton } from "@/components/ui/magnetic-button";
 import Earth from "@/components/ui/globe";
 import { useTheme } from "next-themes";
 import { RandomizedTextEffect } from '@/components/ui/text-randomized';
+import { RetroGrid } from "@/components/ui/shadcn-io/retro-grid";
 
 const LandingPage = () => {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -78,6 +79,14 @@ const LandingPage = () => {
           ))}
         </CarouselContent>
       </Carousel>
+
+        <RetroGrid 
+        angle={70}
+        cellSize={50}
+        opacity={0.6}
+        lightLineColor="#64748b"
+        darkLineColor="#475569"
+      />
     </div>
   );
 };
