@@ -55,5 +55,5 @@ export function RandomizedTextEffect({ text }: AnimatedTextProps) {
     animateText();
   }, [text, animateText]);
 
-  return <div className="relative inline-block">{animatedText}</div>;
+  return <div className="relative inline-block">{animatedText || "*#(*^(@#2"}</div>;
 }
