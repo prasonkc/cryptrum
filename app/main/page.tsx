@@ -7,10 +7,15 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay"
+import Autoplay from "embla-carousel-autoplay";
+import { Button } from "@/components/ui/button";
+import Earth from "@/components/ui/globe";
+import { useTheme } from "next-themes";
+import { RandomizedTextEffect } from '@/components/ui/text-randomized';
 
 const LandingPage = () => {
   const [api, setApi] = React.useState<CarouselApi>();
+  const { resolvedTheme } = useTheme();
 
   let scrollTimeout: NodeJS.Timeout | null = null;
   const handleScroll = (e: React.WheelEvent) => {
@@ -27,14 +32,40 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="h-screen w-screen" onWheel={handleScroll}>
+<div
+  className="min-h-screen flex flex-col overflow-hidden"
+  onWheel={handleScroll}
+>      <div className="main-content flex flex-col items-center justify-center pt-20 gap-6">
+        <h1 className="heading text-center text-3xl">Welcome to the <b> <RandomizedTextEffect text='Encrypted'/></b> Forum</h1>
+
+        <Button variant={"outline"} className="cursor-pointer">
+          Login or Signup
+        </Button>
+
+        <div className="w-full flex justify-center">
+          <Earth
+            dark={resolvedTheme === "dark" ? 1 : 0.05}
+            baseColor={
+              resolvedTheme === "dark"
+                ? [0.25, 0.55, 1.0]
+                : [0.88, 0.88, 0.88]
+            }
+            glowColor={
+              resolvedTheme === "dark"
+                ? [0.27, 0.58, 0.9]
+                : [0.01, 0.01, 0.01]
+            }
+          />
+        </div>
+      </div>
+
       <Carousel
-        className="w-full max-w-[70%] m-auto flex"
+        className="w-full max-w-[70%] mx-auto mt-16"
         opts={{ align: "start", loop: true }}
-        plugins={[Autoplay({delay: 3000})]}
+        plugins={[Autoplay({ delay: 3000 })]}
         setApi={setApi}
       >
-        <CarouselContent className="ml-1 my-5">
+        <CarouselContent className="ml-1 mt-5">
           {Array.from({ length: 5 }).map((_, index) => (
             <CarouselItem
               key={index}
