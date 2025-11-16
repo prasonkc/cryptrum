@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const ForumCard = () => {
   return (
     <div className="w-[400px] h-[300px]">
-      <Card className={`cursor-pointer border-2 shadow-x border-blue-700`}>
+      <Card className={`cursor-pointer border-2 shadow-x transition-transform hover:scale-105`}>
         <CardHeader className=" flex items-center ">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
