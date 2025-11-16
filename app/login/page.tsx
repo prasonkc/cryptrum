@@ -70,7 +70,7 @@ export default function Login() {
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required placeholder="Your Password"/>
               </div>
             </div>
           </form>
