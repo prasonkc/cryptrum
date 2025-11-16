@@ -1,10 +1,12 @@
+"use client"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ForumCard = () => {
   return (
-    <div>
-      <Card className="w-[15%] cursor-pointer border-2 shadow-xl shadow-gray-100">
+    <div className="w-[400px] h-[300px]">
+      <Card className={`cursor-pointer border-2 shadow-x border-blue-700`}>
         <CardHeader className=" flex items-center ">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
