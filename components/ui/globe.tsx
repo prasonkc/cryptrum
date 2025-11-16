@@ -28,47 +28,47 @@ const Earth: React.FC<EarthProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    let width = 0;
-    const onResize = () =>
-      canvasRef.current && (width = canvasRef.current.offsetWidth);
-    window.addEventListener('resize', onResize);
-    onResize();
-    let phi = 0;
+useEffect(() => {
+  if (!canvasRef.current) return;
 
-    onResize();
-    const globe = createGlobe(canvasRef.current!, {
-      devicePixelRatio: 2,
-      width: width * 2,
-      height: width * 2,
-      phi: 0,
-      theta: theta,
-      dark: dark,
-      scale: scale,
-      diffuse: diffuse,
-      mapSamples: mapSamples,
-      mapBrightness: mapBrightness,
-      baseColor: baseColor,
-      markerColor: markerColor,
-      glowColor: glowColor,
-      opacity: 1,
-      offset: [0, 0],
-      markers: [
-        // longitude latitude
-      ],
-      onRender: (state: Record<string, any>) => {
-        // Called on every animation frame.
-        // `state` will be an empty object, return updated params.\
-        state.phi = phi;
-        phi += 0.003;
-      },
-    });
+  const width = canvasRef.current.offsetWidth;
+  let phi = 0;
 
-    return () => {
-      globe.destroy();
-    };
-  }, []);
+  const globe = createGlobe(canvasRef.current, {
+    devicePixelRatio: 2,
+    width: width * 2,
+    height: width * 2,
+    phi: 0,
+    theta,
+    dark,
+    scale,
+    diffuse,
+    mapSamples,
+    mapBrightness,
+    baseColor,
+    markerColor,
+    glowColor,
+    opacity: 1,
+    offset: [0, 0],
+    markers: [],
+    onRender: (state) => {
+      state.phi = phi;
+      phi += 0.003;
+    },
+  });
 
+  return () => globe.destroy();
+}, [
+  theta,
+  dark,
+  scale,
+  diffuse,
+  mapSamples,
+  mapBrightness,
+  baseColor,
+  markerColor,
+  glowColor,
+]); 
   return (
     <div
       className={cn(

@@ -8,7 +8,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import { Button } from "@/components/ui/button";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 import Earth from "@/components/ui/globe";
 import { useTheme } from "next-themes";
 import { RandomizedTextEffect } from '@/components/ui/text-randomized';
@@ -38,9 +38,9 @@ const LandingPage = () => {
 >      <div className="main-content flex flex-col items-center justify-center pt-20 gap-6">
         <h1 className="heading text-center text-3xl">Welcome to the <b> <RandomizedTextEffect text='Encrypted'/></b> Forum</h1>
 
-        <Button variant={"outline"} className="cursor-pointer">
+        <MagneticButton variant={"outline"} className="cursor-pointer">
           Login or Signup
-        </Button>
+        </MagneticButton>
 
         <div className="w-full flex justify-center">
           <Earth
