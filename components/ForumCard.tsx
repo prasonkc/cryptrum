@@ -4,8 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ForumCard = () => {
+  // Task make it responsive
   return (
-    <div className="w-[400px] h-[300px]">
+    <div className="w-[400px] h-[300px] backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl">
       <Card className={`cursor-pointer border-2 shadow-x transition-transform hover:scale-105`}>
         <CardHeader className=" flex items-center ">
           <Avatar>
