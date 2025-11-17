@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const ForumCard = () => {
   // Task make it responsive
   return (
-    <div className="w-[400px] h-[300px] backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl">
-      <Card className={`cursor-pointer border-2 shadow-x transition-transform hover:scale-105`}>
+    <div className="w-[400px] h-[300px]">
+      <Card className={`cursor-pointer border-2 shadow-x transition-transform hover:scale-105 backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl`}>
         <CardHeader className=" flex items-center ">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
