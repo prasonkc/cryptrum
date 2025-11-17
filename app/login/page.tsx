@@ -22,6 +22,7 @@ export default function Login() {
 
   return (
     <main className="flex justify-center items-center min-h-screen">
+      
       <Card className="w-full max-w-sm bg-secondary outline-1">
         <CardHeader>
           <CardTitle>Login or Sign Up</CardTitle>

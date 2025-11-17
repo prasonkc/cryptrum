@@ -13,10 +13,12 @@ import Earth from "@/components/ui/globe";
 import { useTheme } from "next-themes";
 import { RandomizedTextEffect } from '@/components/ui/text-randomized';
 import { RetroGrid } from "@/components/ui/shadcn-io/retro-grid";
+import { LoginPopover } from "@/components/LoginPopover";
 
 const LandingPage = () => {
   const [api, setApi] = React.useState<CarouselApi>();
   const { resolvedTheme } = useTheme();
+  const [openLogin, setOpenLogin] = React.useState(false);
 
   let scrollTimeout: NodeJS.Timeout | null = null;
   const handleScroll = (e: React.WheelEvent) => {
@@ -33,7 +35,7 @@ const LandingPage = () => {
   };
 
   function handleMagneticButtonClick(){
-
+    setOpenLogin(!openLogin)
   }
 
   return (
@@ -47,7 +49,7 @@ const LandingPage = () => {
           Login or Signup
         </MagneticButton>
 
-        {/* {showLogin && <LoginPopover />} */}
+        <LoginPopover open={openLogin} onOpenChange={setOpenLogin} />
 
         <div className="w-full flex justify-center">
           <Earth
