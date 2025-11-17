@@ -34,6 +34,13 @@ const LandingPage = () => {
     }, 400);
   };
 
+  //  React.useEffect(() => {
+  //   document.body.style.overflow = 'hidden';
+  //   return () => {
+  //     document.body.style.overflow = 'unset';
+  //   };
+  // }, []);
+
   function handleMagneticButtonClick(){
     setOpenLogin(!openLogin)
   }
@@ -46,7 +53,7 @@ const LandingPage = () => {
         <h1 className="heading text-center text-3xl">Welcome to the <b> <RandomizedTextEffect text='Encrypted'/></b> Forum</h1>
 
         <MagneticButton variant={"outline"} className="cursor-pointer" onClick={handleMagneticButtonClick}>
-          Login or Signup
+          Login
         </MagneticButton>
 
         <LoginPopover open={openLogin} onOpenChange={setOpenLogin} />
@@ -69,7 +76,7 @@ const LandingPage = () => {
       </div>
 
       <Carousel
-        className="w-full max-w-[70%] mx-auto mt-10"
+        className="w-full max-w-[70%] mx-auto md:mt-10"
         opts={{ align: "start", loop: true }}
         plugins={[Autoplay({ delay: 3000 })]}
         setApi={setApi}
@@ -88,7 +95,8 @@ const LandingPage = () => {
         </CarouselContent>
       </Carousel>
 
-      <RetroGrid 
+      <RetroGrid
+      className="md:flex hidden"
       angle={70}
       cellSize={100}
       opacity={0.3}

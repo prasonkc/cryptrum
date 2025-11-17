@@ -1,28 +1,24 @@
 "use client"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ForumCard = () => {
-  // Task make it responsive
   return (
-    <div className="w-[400px] h-[300px]">
-      <Card className={`cursor-pointer border-2 shadow-x transition-transform hover:scale-105 backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl`}>
-        <CardHeader className=" flex items-center ">
-          <Avatar>
+    <div className="w-full max-w-[400px] mx-auto">
+      <Card className="cursor-pointer shadow-xl transition-transform hover:scale-105 backdrop-blur-xl bg-white/10 border border-white/20 h-full flex flex-col gap-2">
+        <CardHeader className="flex flex-row space-y-3 gap-3 justify-start items-center">
+          <Avatar className="md:w-12 md:h-12 sm:h-7 sm:w-7">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-
-          <CardTitle className="text-lg">Lorem ipsum dolor </CardTitle>
+          <CardTitle className="md:text-2xl text-center">Lorem ipsum dolor</CardTitle>
         </CardHeader>
-
-        <CardContent>
-          <p className="text-sm leading-relaxed max-w-prose space-y-2 space-x-1.5">
-            Card Content is a content that im going to write within tie card
+        <CardContent className="flex-1">
+          <p className="text-sm leading-relaxed line-clamp-6">
+            Card Content is a content that I amm going to write within the card.
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore
             corrupti rem asperiores praesentium expedita totam officia quaerat,
-            porro dolorum natus suscipit iste?Lorem ipsum dolor sit amet
+            porro dolorum natus suscipit iste? Lorem ipsum dolor sit amet
             consectetur adipisicing elit. Ut, architecto. Lorem ipsum dolor sit
             amet.
           </p>
