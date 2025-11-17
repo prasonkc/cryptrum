@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { Button } from "@/components/ui/button";
+import { Button}from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button as StatefulButton} from "./ui/stateful-button";
 
 interface LoginPopoverProps {
   open: boolean;
@@ -127,9 +128,10 @@ function AuthForm({
         <Input id="password" type="password" placeholder="Your password" />
       </div>
 
-      <Button variant={"secondary"} type="submit" className="w-full hover:scale-110 transition-all cursor-pointer">
+      <StatefulButton type="submit" className="w-20 m-auto rounded-xl hover:scale-110 transition-all cursor-pointer">
+        {/* <Spinner></Spinner> */}
         {isLogin ? "Login" : "Sign Up"}
-      </Button>
+      </StatefulButton>
 
       <Button variant="outline" className="w-full hover:scale-105 transition-all cursor-pointer">
         {isLogin ? "Login with Google" : "Sign Up with Google"}
