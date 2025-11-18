@@ -34,13 +34,6 @@ const LandingPage = () => {
     }, 400);
   };
 
-  //  React.useEffect(() => {
-  //   document.body.style.overflow = 'hidden';
-  //   return () => {
-  //     document.body.style.overflow = 'unset';
-  //   };
-  // }, []);
-
   function handleMagneticButtonClick(){
     setOpenLogin(!openLogin)
   }
