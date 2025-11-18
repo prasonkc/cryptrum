@@ -15,10 +15,21 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   username String @unique @db.VarChar(50)
   email String @unique @db.VarChar(100)
-  password String? @db.VarChar(255)
+  password String @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  oauthAccounts OauthAccounts[]
+}
+
+model OauthAccounts{
+  id String @id @default(uuid())
+  user_id String
+  provider String
+  providerId String
+  createdAt DateTime @default(now())
+  user User @relation(fields: [user_id], references: [id])
 }
