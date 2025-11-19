@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button as StatefulButton } from "./ui/stateful-button";
+import { StatefulButton } from "./ui/stateful-button";
 import { authClient } from "@/lib/auth-client";
 import { useDispatch, UseDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
@@ -100,6 +100,37 @@ function AuthForm({
   const [username, setUsername] = React.useState<string>("");
 
   const dispatch = useDispatch<AppDispatch>();
+
+  const handleLogin = async (e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      dispatch(setError("Email and password are required"));
+      throw new Error("Missing email or password");
+    }
+
+    try {
+      const response = isLogin
+        ? await authClient.signIn.email({ email, password })
+        : await authClient.signUp.email({
+            email,
+            password,
+            name: username,
+          });
+
+      if (response.error) {
+        dispatch(setError(response.error.message as string));
+        throw new Error(response.error.message);
+      }
+
+      console.log(isLogin ? "logged in" : "Signup success");
+      return;
+    } catch (err) {
+      dispatch(setError(err instanceof Error ? err.message : "Unknown error"));
+      throw err;
+    }
+  };
+
   return (
     <form className={cn("grid items-start gap-6", className)}>
       <div className="flex justify-end -mt-2">
@@ -160,38 +191,12 @@ function AuthForm({
       </div>
 
       <StatefulButton
-        type="submit"
-        className="w-20 m-auto rounded-xl hover:scale-110 transition-all cursor-pointer"
-        onClick={async () => {
-          if (isLogin) {
-            const res = await authClient.signIn.email({
-              email,
-              password,
-            });
-
-            if (res.error) {
-              dispatch(setError(res.error.toString()));
-              return;
-            }
-            // Test
-            console.log("logged in");
-          } else {
-            const res = await authClient.signUp.email({
-              email:email,
-              password:password,
-              name: username
-            });
-
-            if (res.error) {
-              dispatch(setError(res.error.toString()));
-              return;
-            }
-            // Test
-            console.log("Signup success");
-          }
+        type="button"
+        className="w-20 m-auto rounded-lg hover:scale-110 transition-all cursor-pointer border border-white"
+        onClick={(e) => {
+          handleLogin(e);
         }}
       >
-        {/* <Spinner></Spinner> */}
         {isLogin ? "Login" : "Sign Up"}
       </StatefulButton>
 
