@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { Button}from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -23,7 +23,11 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button as StatefulButton} from "./ui/stateful-button";
+import { Button as StatefulButton } from "./ui/stateful-button";
+import { authClient } from "@/lib/auth-client";
+import { useDispatch, UseDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import { setError } from "@/redux/slice/ErrorSlice";
 
 interface LoginPopoverProps {
   open: boolean;
@@ -33,9 +37,7 @@ interface LoginPopoverProps {
 export function LoginPopover({ open, onOpenChange }: LoginPopoverProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isLogin, setIsLogin] = React.useState(true);
-
-  const glass = 
-    "backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl";
+  const glass = "backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl";
 
   if (isDesktop) {
     return (
@@ -68,7 +70,11 @@ export function LoginPopover({ open, onOpenChange }: LoginPopoverProps) {
           </DrawerDescription>
         </DrawerHeader>
 
-        <AuthForm className="px-4" isLogin={isLogin} toggle={() => setIsLogin(!isLogin)} />
+        <AuthForm
+          className="px-4"
+          isLogin={isLogin}
+          toggle={() => setIsLogin(!isLogin)}
+        />
 
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -89,6 +95,11 @@ function AuthForm({
   isLogin: boolean;
   toggle: () => void;
 }) {
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [username, setUsername] = React.useState<string>("");
+
+  const dispatch = useDispatch<AppDispatch>();
   return (
     <form className={cn("grid items-start gap-6", className)}>
       <div className="flex justify-end -mt-2">
@@ -108,12 +119,25 @@ function AuthForm({
         {!isLogin && (
           <div className="grid gap-3">
             <Label htmlFor="username">Username</Label>
-            <Input id="username" placeholder="Your username" />
+            <Input
+              id="username"
+              placeholder="Your username"
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+            />
           </div>
         )}
 
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" placeholder="you@example.com" />
+        <Input
+          id="email"
+          type="email"
+          placeholder="you@example.com"
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
       </div>
 
       <div className="grid gap-3">
@@ -125,15 +149,55 @@ function AuthForm({
             </a>
           )}
         </div>
-        <Input id="password" type="password" placeholder="Your password" />
+        <Input
+          id="password"
+          type="password"
+          placeholder="Your password"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
       </div>
 
-      <StatefulButton type="submit" className="w-20 m-auto rounded-xl hover:scale-110 transition-all cursor-pointer">
+      <StatefulButton
+        type="submit"
+        className="w-20 m-auto rounded-xl hover:scale-110 transition-all cursor-pointer"
+        onClick={async () => {
+          if (isLogin) {
+            const res = await authClient.signIn.email({
+              email,
+              password,
+            });
+
+            if (res.error) {
+              dispatch(setError(res.error.toString()));
+              return;
+            }
+            // Test
+            console.log("logged in");
+          } else{
+            const res = await authClient.signUp.email({
+              email: email,
+              password: password,
+              name: username
+            })
+            if (res.error) {
+              dispatch(setError(res.error.toString()));
+              return;
+            }
+            // Test
+            console.log("Signup success")
+          }
+        }}
+      >
         {/* <Spinner></Spinner> */}
         {isLogin ? "Login" : "Sign Up"}
       </StatefulButton>
 
-      <Button variant="outline" className="w-full hover:scale-105 transition-all cursor-pointer">
+      <Button
+        variant="outline"
+        className="w-full hover:scale-105 transition-all cursor-pointer"
+      >
         {isLogin ? "Login with Google" : "Sign Up with Google"}
       </Button>
     </form>
