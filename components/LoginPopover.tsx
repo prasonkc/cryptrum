@@ -175,18 +175,19 @@ function AuthForm({
             }
             // Test
             console.log("logged in");
-          } else{
+          } else {
             const res = await authClient.signUp.email({
-              email: email,
-              password: password,
+              email:email,
+              password:password,
               name: username
-            })
+            });
+
             if (res.error) {
               dispatch(setError(res.error.toString()));
               return;
             }
             // Test
-            console.log("Signup success")
+            console.log("Signup success");
           }
         }}
       >
