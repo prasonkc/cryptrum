@@ -25,9 +25,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { StatefulButton } from "./ui/stateful-button";
 import { authClient } from "@/lib/auth-client";
-import { useDispatch, UseDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 import { setError } from "@/redux/slice/ErrorSlice";
+import { redirect, useRouter } from "next/navigation";
+import { resolve } from "path";
 
 interface LoginPopoverProps {
   open: boolean;
@@ -100,8 +102,9 @@ function AuthForm({
   const [username, setUsername] = React.useState<string>("");
 
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter()
 
-  const handleLogin = async (e:React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -124,7 +127,8 @@ function AuthForm({
       }
 
       console.log(isLogin ? "logged in" : "Signup success");
-      return;
+      router.push("/dashboard")
+      return resolve;
     } catch (err) {
       dispatch(setError(err instanceof Error ? err.message : "Unknown error"));
       throw err;
@@ -193,9 +197,9 @@ function AuthForm({
       <StatefulButton
         type="button"
         className="w-20 m-auto rounded-lg hover:scale-110 transition-all cursor-pointer border border-white"
-        onClick={(e) => {
-          handleLogin(e);
-        }}
+        onClick={(e) => handleLogin(e)}
+        onComplete={() => console.log("Success")}
+        onError={(err) => console.error("Login/signup failed:", err)}
       >
         {isLogin ? "Login" : "Sign Up"}
       </StatefulButton>
