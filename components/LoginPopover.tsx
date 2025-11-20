@@ -28,9 +28,9 @@ import { authClient } from "@/lib/auth-client";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { setError } from "@/redux/slice/ErrorSlice";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { resolve } from "path";
-
+import { createAuthClient } from "better-auth/client";
 interface LoginPopoverProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -102,7 +102,9 @@ function AuthForm({
   const [username, setUsername] = React.useState<string>("");
 
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter()
+  const router = useRouter();
+
+  const oauthClient = createAuthClient();
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -127,7 +129,7 @@ function AuthForm({
       }
 
       console.log(isLogin ? "logged in" : "Signup success");
-      router.push("/dashboard")
+      router.push("/dashboard");
       return resolve;
     } catch (err) {
       dispatch(setError(err instanceof Error ? err.message : "Unknown error"));
@@ -207,8 +209,16 @@ function AuthForm({
       <Button
         variant="outline"
         className="w-full hover:scale-105 transition-all cursor-pointer"
+        onClick={async() => {
+          try {
+            const data = await authClient.signIn.social({ provider: "github" });
+            console.log(data);
+          } catch (err) {
+            console.error(err);
+          }
+        }}
       >
-        {isLogin ? "Login with Google" : "Sign Up with Google"}
+        {isLogin ? "Login with Github" : "Sign Up with Github"}
       </Button>
     </form>
   );
