@@ -30,7 +30,6 @@ import { AppDispatch } from "@/redux/store";
 import { setError } from "@/redux/slice/ErrorSlice";
 import { useRouter } from "next/navigation";
 import { resolve } from "path";
-import { createAuthClient } from "better-auth/client";
 interface LoginPopoverProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -103,8 +102,6 @@ function AuthForm({
 
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-
-  const oauthClient = createAuthClient();
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -207,15 +204,14 @@ function AuthForm({
       </StatefulButton>
 
       <Button
+        type="button"
         variant="outline"
         className="w-full hover:scale-105 transition-all cursor-pointer"
-        onClick={async() => {
-          try {
-            const data = await authClient.signIn.social({ provider: "github" });
-            console.log(data);
-          } catch (err) {
-            console.error(err);
-          }
+        onClick={async () => {
+          await authClient.signIn.social({
+            provider: "github",
+            callbackURL: "/dashboard",
+          });
         }}
       >
         {isLogin ? "Login with Github" : "Sign Up with Github"}
