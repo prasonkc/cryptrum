@@ -3,27 +3,11 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { StatefulButton } from "./ui/stateful-button";
+import { XIcon } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
@@ -38,59 +22,52 @@ interface LoginPopoverProps {
 }
 
 export function LoginPopover({ open, onOpenChange }: LoginPopoverProps) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isLogin, setIsLogin] = React.useState(true);
   const glass = "backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl";
 
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={onOpenChange} modal={true}>
-        <DialogContent
-          className={cn("sm:max-w-[420px]", glass, "rounded-2xl")}
-          onEscapeKeyDown={(e) => e.preventDefault()}
-          onPointerDown={(e) => e.preventDefault()}
-          onInteractOutside={(e) => e.preventDefault()}
+  if (!open) return null;
+
+  return (
+    <>
+      <div
+        className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+        onClick={() => onOpenChange(false)}
+      />
+      
+      {/* Login Form */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div
+          className={cn(
+            "w-full max-w-md p-6",
+            glass,
+            "rounded-2xl",
+            "animate-in fade-in-0 zoom-in-95 duration-200"
+          )}
+          onClick={(e) => e.stopPropagation()}
         >
-          <DialogHeader>
-            <DialogTitle>{isLogin ? "Login" : "Signup"}</DialogTitle>
-            <DialogDescription>
+          <div className="mb-6 relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-0 right-0"
+              onClick={() => onOpenChange(false)}
+            >
+              <XIcon className="h-4 w-4" />
+            </Button>
+            <h2 className="text-2xl font-semibold mb-2">
+              {isLogin ? "Login" : "Signup"}
+            </h2>
+            <p className="text-sm text-muted-foreground">
               {isLogin
                 ? "Enter your credentials to access your account."
                 : "Create a new account to get started."}
-            </DialogDescription>
-          </DialogHeader>
+            </p>
+          </div>
 
           <AuthForm isLogin={isLogin} toggle={() => setIsLogin(!isLogin)} />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer open={open} onOpenChange={onOpenChange} modal={true}>
-      <DrawerContent className={cn(glass, "rounded-t-2xl")}>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>{isLogin ? "Login" : "Signup"}</DrawerTitle>
-          <DrawerDescription>
-            {isLogin
-              ? "Enter your credentials to access your account."
-              : "Create a new account to get started."}
-          </DrawerDescription>
-        </DrawerHeader>
-
-        <AuthForm
-          className="px-4"
-          isLogin={isLogin}
-          toggle={() => setIsLogin(!isLogin)}
-        />
-
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -109,6 +86,7 @@ function AuthForm({
   const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const recaptchaRef = React.useRef<ReCAPTCHA>(null);
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -142,6 +120,7 @@ function AuthForm({
         throw new Error(response.error.message);
       }
 
+      recaptchaRef.current?.reset();
       console.log(isLogin ? "logged in" : "Signup success");
       router.push("/dashboard");
       return resolve;
@@ -216,6 +195,7 @@ function AuthForm({
 
       <div className="m-auto">
         <ReCAPTCHA
+          ref={recaptchaRef}
           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
           onChange={handleCaptchaChange}
         />
