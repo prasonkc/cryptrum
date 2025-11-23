@@ -126,6 +126,11 @@ function AuthForm({
             email,
             password,
             name: username,
+            fetchOptions: {
+              headers: {
+                "x-captcha-response": captchaToken,
+              },
+            },
           });
 
       if (response.error) {
@@ -140,6 +145,10 @@ function AuthForm({
       dispatch(setError(err instanceof Error ? err.message : "Unknown error"));
       throw err;
     }
+  };
+
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaToken(token);
   };
 
   return (
@@ -201,12 +210,10 @@ function AuthForm({
         />
       </div>
 
-      {/* <ReCAPTCHA
-        // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-        // onChange={() => {
-        //   setCaptchaToken(token);
-        // }}
-      /> */}
+      <ReCAPTCHA
+        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+        onChange={handleCaptchaChange}
+      />
 
       <StatefulButton
         type="button"
