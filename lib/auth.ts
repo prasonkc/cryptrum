@@ -24,7 +24,7 @@ export const auth = betterAuth({
   plugins: [
     captcha({
       provider: "google-recaptcha",
-      secretKey: process.env.TURNSTILE_SECRET_KEY!,
+      secretKey: process.env.RECAPTCHA_SECRET_KEY!,
     }),
   ],
 });
