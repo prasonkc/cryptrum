@@ -44,8 +44,13 @@ export function LoginPopover({ open, onOpenChange }: LoginPopoverProps) {
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className={cn("sm:max-w-[420px]", glass, "rounded-2xl")}>
+      <Dialog open={open} onOpenChange={onOpenChange} modal={true}>
+        <DialogContent
+          className={cn("sm:max-w-[420px]", glass, "rounded-2xl")}
+          onEscapeKeyDown={(e) => e.preventDefault()}
+          onPointerDown={(e) => e.preventDefault()}
+          onInteractOutside={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle>{isLogin ? "Login" : "Signup"}</DialogTitle>
             <DialogDescription>
@@ -62,7 +67,7 @@ export function LoginPopover({ open, onOpenChange }: LoginPopoverProps) {
   }
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
+    <Drawer open={open} onOpenChange={onOpenChange} modal={true}>
       <DrawerContent className={cn(glass, "rounded-t-2xl")}>
         <DrawerHeader className="text-left">
           <DrawerTitle>{isLogin ? "Login" : "Signup"}</DrawerTitle>
@@ -101,8 +106,7 @@ function AuthForm({
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [username, setUsername] = React.useState<string>("");
-  const [captchaToken, setCaptchaToken] = React.useState(null);
-
+  const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
@@ -210,10 +214,12 @@ function AuthForm({
         />
       </div>
 
-      <ReCAPTCHA
-        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-        onChange={handleCaptchaChange}
-      />
+      <div className="m-auto">
+        <ReCAPTCHA
+          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+          onChange={handleCaptchaChange}
+        />
+      </div>
 
       <StatefulButton
         type="button"
