@@ -30,6 +30,8 @@ import { AppDispatch } from "@/redux/store";
 import { setError } from "@/redux/slice/ErrorSlice";
 import { useRouter } from "next/navigation";
 import { resolve } from "path";
+import ReCAPTCHA from "react-google-recaptcha";
+
 interface LoginPopoverProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -99,6 +101,7 @@ function AuthForm({
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [username, setUsername] = React.useState<string>("");
+  const [captchaToken, setCaptchaToken] = React.useState(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
@@ -109,6 +112,11 @@ function AuthForm({
     if (!email || !password) {
       dispatch(setError("Email and password are required"));
       throw new Error("Missing email or password");
+    }
+
+    if (!captchaToken) {
+      dispatch(setError("Please complete the captcha"));
+      return;
     }
 
     try {
@@ -192,6 +200,13 @@ function AuthForm({
           }}
         />
       </div>
+
+      {/* <ReCAPTCHA
+        // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+        // onChange={() => {
+        //   setCaptchaToken(token);
+        // }}
+      /> */}
 
       <StatefulButton
         type="button"

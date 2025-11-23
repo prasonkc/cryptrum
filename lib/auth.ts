@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "./generated/prisma/client";
+import { captcha } from "better-auth/plugins";
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
@@ -20,4 +21,10 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+  plugins: [
+    captcha({
+      provider: "google-recaptcha",
+      secretKey: process.env.TURNSTILE_SECRET_KEY!,
+    }),
+  ],
 });
