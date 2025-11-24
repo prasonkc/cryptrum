@@ -92,15 +92,17 @@ function AuthForm({
 
     if (!email || !password) {
       dispatch(setError("Email and password are required"));
-      throw new Error("Missing email or password");
+      return; // Don't throw here
     }
 
     if (!executeRecaptcha) {
-      throw new Error("reCAPTCHA not ready");
+      dispatch(setError("reCAPTCHA not ready. Please try again."));
+      return;
     }
-    const captchaToken = await executeRecaptcha(isLogin ? "login" : "signup");
 
     try {
+      const captchaToken = await executeRecaptcha(isLogin ? "login" : "signup");
+
       const baseOptions = {
         fetchOptions: {
           headers: {
@@ -110,7 +112,11 @@ function AuthForm({
       };
 
       const response = isLogin
-        ? await authClient.signIn.email({ email, password, ...baseOptions })
+        ? await authClient.signIn.email({
+            email,
+            password,
+            ...baseOptions,
+          })
         : await authClient.signUp.email({
             email,
             password,

@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "./generated/prisma/client";
-import { captcha } from "better-auth/plugins";
+import { verifyRecaptcha } from "./verify-captcha";
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
@@ -21,10 +21,17 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
-  plugins: [
-    captcha({
-      provider: "google-recaptcha",
-      secretKey: process.env.RECAPTCHA_SECRET_KEY!,
-    }),
-  ],
+  async onRequest(request: Request) {
+    const captchaToken = request.headers.get("x-captcha-token");
+
+    const path = new URL(request.url).pathname;
+    if (path.includes("/sign-in") || path.includes("/sign-up")) {
+      if (captchaToken) {
+        const isValid = await verifyRecaptcha(captchaToken);
+        if (!isValid) {
+          throw new Error("reCAPTCHA verification failed");
+        }
+      }
+    }
+  },
 });
