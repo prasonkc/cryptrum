@@ -14,7 +14,8 @@ import { AppDispatch } from "@/redux/store";
 import { setError } from "@/redux/slice/ErrorSlice";
 import { useRouter } from "next/navigation";
 import { resolve } from "path";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import ReCAPTCHA from "react-google-recaptcha";
+
 interface LoginPopoverProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -32,7 +33,7 @@ export function LoginPopover({ open, onOpenChange }: LoginPopoverProps) {
         className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
         onClick={() => onOpenChange(false)}
       />
-
+      
       {/* Login Form */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
@@ -79,49 +80,39 @@ function AuthForm({
   isLogin: boolean;
   toggle: () => void;
 }) {
-  const { executeRecaptcha } = useGoogleReCaptcha();
-
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [username, setUsername] = React.useState<string>("");
+  const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const recaptchaRef = React.useRef<ReCAPTCHA>(null);
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (!email || !password) {
       dispatch(setError("Email and password are required"));
-      return; // Don't throw here
+      throw new Error("Missing email or password");
     }
 
-    if (!executeRecaptcha) {
-      dispatch(setError("reCAPTCHA not ready. Please try again."));
+    if (!captchaToken) {
+      dispatch(setError("Please complete the captcha"));
       return;
     }
 
     try {
-      const captchaToken = await executeRecaptcha(isLogin ? "login" : "signup");
-
-      const baseOptions = {
-        fetchOptions: {
-          headers: {
-            "x-captcha-token": captchaToken,
-          },
-        },
-      };
-
       const response = isLogin
-        ? await authClient.signIn.email({
-            email,
-            password,
-            ...baseOptions,
-          })
+        ? await authClient.signIn.email({ email, password })
         : await authClient.signUp.email({
             email,
             password,
             name: username,
-            ...baseOptions,
+            fetchOptions: {
+              headers: {
+                "x-captcha-response": captchaToken,
+              },
+            },
           });
 
       if (response.error) {
@@ -129,6 +120,7 @@ function AuthForm({
         throw new Error(response.error.message);
       }
 
+      recaptchaRef.current?.reset();
       console.log(isLogin ? "logged in" : "Signup success");
       router.push("/dashboard");
       return resolve;
@@ -136,6 +128,10 @@ function AuthForm({
       dispatch(setError(err instanceof Error ? err.message : "Unknown error"));
       throw err;
     }
+  };
+
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaToken(token);
   };
 
   return (
@@ -197,9 +193,13 @@ function AuthForm({
         />
       </div>
 
-      {/* <div className="m-auto">
-        
-      </div> */}
+      <div className="m-auto">
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+          onChange={handleCaptchaChange}
+        />
+      </div>
 
       <StatefulButton
         type="button"
