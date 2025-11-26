@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "next-themes";
 import { TracingBeam } from "@/components/ui/tracing-beam";
@@ -9,8 +9,8 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [views] = useState(Math.floor(Math.random() * 1000) + 100);
-  const [likes] = useState(Math.floor(Math.random() * 50) + 10);
+  const [views] = [0]
+  const [likes] = [0]
 
   return (
     <motion.div
@@ -34,25 +34,13 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
           relative overflow-hidden
         `}
       >
-        {/* Animated gradient background on hover */}
-        <motion.div
-          className="absolute inset-0 opacity-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10"
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-        />
-        
         <CardHeader className="relative z-10">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <motion.div
-                animate={{ x: isHovered ? 5 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
                 <CardTitle className="mb-2">Exploring Modern Web Development</CardTitle>
                 <CardDescription>
                   A deep dive into the latest trends and best practices in building scalable web applications
                 </CardDescription>
-              </motion.div>
             </div>
             
             <motion.div
@@ -60,7 +48,7 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
               animate={{ scale: 1 }}
               transition={{ delay: index * 0.1 + 0.3, type: "spring", stiffness: 200 }}
             >
-              <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0">
+              <Badge className="text-white border-0">
                 Featured
               </Badge>
             </motion.div>
@@ -113,6 +101,7 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   );
 };
 
+
 const Dashboard = () => {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -120,7 +109,6 @@ const Dashboard = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const { scrollYProgress } = useScroll();
 
-  // Parallax effects
   const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -100]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
@@ -152,37 +140,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Animated background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <motion.div
-          className="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
-          animate={{
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-      </div>
-
-      {/* Animated Navbar */}
+      {/* Navbar */}
       <AnimatePresence>
         {isNavbar && (
           <motion.div
@@ -261,7 +219,7 @@ const Dashboard = () => {
         )}
       </AnimatePresence>
 
-      {/* Hero Section with Parallax */}
+      {/* Hero Section */}
       <motion.div
         style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
         className="w-full"
@@ -281,16 +239,7 @@ const Dashboard = () => {
             relative overflow-hidden
           `}
         >
-          {/* Animated gradient overlay */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10"
-            animate={{
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            style={{ backgroundSize: "200% 100%" }}
-          />
-
+          
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -341,64 +290,6 @@ const Dashboard = () => {
           ))}
         </div>
       </TracingBeam>
-
-      {/* Animated Scroll Progress Indicator */}
-      <motion.div
-        className="fixed bottom-8 right-8 z-40"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1, type: "spring", stiffness: 200 }}
-      >
-        <motion.div
-          className={`
-            w-16 h-16 rounded-full flex items-center justify-center
-            ${glass}
-            relative
-          `}
-          whileHover={{ scale: 1.1 }}
-        >
-          <svg className="absolute inset-0 -rotate-90" viewBox="0 0 100 100">
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              stroke="currentColor"
-              strokeWidth="8"
-              fill="none"
-              className="text-gray-300/20"
-            />
-            <motion.circle
-              cx="50"
-              cy="50"
-              r="45"
-              stroke="url(#gradient)"
-              strokeWidth="8"
-              fill="none"
-              strokeLinecap="round"
-              style={{
-                pathLength: scrollYProgress,
-              }}
-              strokeDasharray="0 1"
-            />
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#3b82f6" />
-                <stop offset="50%" stopColor="#a855f7" />
-                <stop offset="100%" stopColor="#ec4899" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <motion.div 
-            className="text-sm font-semibold relative z-10"
-            key={Math.round(scrollYProgress.get() * 100)}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.2 }}
-          >
-            {Math.round(scrollYProgress.get() * 100)}%
-          </motion.div>
-        </motion.div>
-      </motion.div>
     </div>
   );
 };
