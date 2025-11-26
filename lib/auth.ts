@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "./generated/prisma/client";
 import { verifyRecaptcha } from "./verify-captcha";
+import {sendEmail} from "./sendemail";
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
@@ -10,6 +11,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    // requireEmailVerification: true,
   },
   socialProviders: {
     github: {
@@ -33,5 +35,18 @@ export const auth = betterAuth({
         }
       }
     }
+  },
+  emailVerification: {
+    enabled: true,
+    sendVerificationEmail: async ({ user, url }, request) => {
+      await sendEmail({
+        to: user.email,
+        subject: "Verify your email",
+        html: `
+          <p>Click to verify:</p>
+          <a href="${url}">${url}</a>
+        `,
+      });
+    },
   },
 });

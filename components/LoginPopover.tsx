@@ -112,15 +112,14 @@ function AuthForm({
                 "x-captcha-response": captchaToken,
               },
             },
-          });
-
-      if (response.error) {
-        dispatch(setError(response.error.message as string));
-        throw new Error(response.error.message);
-      }
-
-      recaptchaRef.current?.reset();
-      console.log(isLogin ? "logged in" : "Signup success");
+          })
+          
+          if (response.error) {
+            dispatch(setError(response.error.message as string));
+            throw new Error(response.error.message);
+          }
+          recaptchaRef.current?.reset();
+          console.log(isLogin ? "logged in" : "Signup success");
       // router.push("/dashboard");
       return resolve;
     } catch (err) {
