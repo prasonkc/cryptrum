@@ -11,7 +11,16 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "next-themes";
 import { TracingBeam } from "@/components/ui/tracing-beam";
-import { Menu, Search, Bell, User, TrendingUp, Clock, Eye, Bot } from "lucide-react";
+import {
+  Menu,
+  Search,
+  Bell,
+  User,
+  TrendingUp,
+  Clock,
+  Eye,
+  Bot,
+} from "lucide-react";
 import {
   motion,
   useScroll,
@@ -21,6 +30,7 @@ import {
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import ScrambledText from "@/components/ui/shadcn-io/scrambled-text";
 import { Particles } from "@/components/ui/shadcn-io/particles";
+import { LampContainer } from "@/components/ui/lamp";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -159,7 +169,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen relative">
-                    <Particles
+      <Particles
         className="absolute inset-0"
         quantity={1000}
         ease={80}
@@ -249,42 +259,62 @@ const Dashboard = () => {
       {/* Hero Section */}
       <motion.div
         style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
-        className="w-full"
+        className="w-full pt-8 pb-4"
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className={`
-            w-[90%] sm:w-[85%] lg:w-[80%] mx-auto
-            rounded-3xl p-8 sm:p-12 lg:p-16
-            my-6 sm:my-8 lg:my-10
-            flex flex-col items-center justify-center
-            text-center
-            min-h-[50vh] sm:min-h-[55vh] lg:min-h-[60vh]
-            ${glass}
-            relative overflow-hidden
-          `}
-        >
-          <ScrambledText
-            className="text-center"
-            radius={120}
-            duration={1}
-            speed={0.6}
-            scrambleChars="!@#$%^&*()_+"
-            style={{
-              color: "currentColor",
-              fontSize: "clamp(1rem, 3vw, 3rem)",
-              fontFamily: "inherit",
-              margin: "20px auto"
-            }}
-          >
-            Welcome to your Dashboard
-          </ScrambledText>
+        <div className="w-[90%] sm:w-[85%] lg:w-[80%] max-w-6xl mx-auto">
+          <LampContainer className="min-h-[60vh]">
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.8,
+                ease: "easeInOut",
+              }}
+              className="text-center text-4xl md:text-6xl font-bold bg-gradient-to-br from-slate-300 to-slate-500 bg-clip-text text-transparent mb-6"
+            >
+              <ScrambledText
+                className="text-center mb-10"
+                radius={120}
+                duration={1}
+                speed={0.6}
+                scrambleChars="!@#$%^&*()_+"
+                style={{
+                  color: "currentColor",
+                  fontSize: "clamp(1rem, 3vw, 3rem)",
+                  fontFamily: "inherit",
+                }}
+              >
+                Welcome to your Dashboard
+              </ScrambledText>
+            </motion.h1>
 
-            <LiquidButton>Create a Post</LiquidButton>
-          </motion.div>
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.8,
+                ease: "easeInOut",
+              }}
+            >
+              <LiquidButton>
+                <motion.p
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.3,
+                    duration: 0.8,
+                    ease: "easeInOut",
+                  }}
+                >
+                  Create a Post
+                </motion.p>
+              </LiquidButton>
+            </motion.div>
+          </LampContainer>
+        </div>
+      </motion.div>
 
       {/* Content Section */}
       <TracingBeam className="w-full min-h-screen px-4 sm:px-6">
