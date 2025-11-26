@@ -1,27 +1,39 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "next-themes";
 import { TracingBeam } from "@/components/ui/tracing-beam";
-import { Menu, Search, Bell, User, TrendingUp, Clock, Eye } from "lucide-react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { Menu, Search, Bell, User, TrendingUp, Clock, Eye, Bot } from "lucide-react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
-import { FlickeringGrid } from "@/components/ui/shadcn-io/flickering-grid";
+import ScrambledText from "@/components/ui/shadcn-io/scrambled-text";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [views] = [0]
-  const [likes] = [0]
+  const [views] = [0];
+  const [likes] = [0];
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.5,
+        duration: 0.2,
         delay: index * 0.1,
-        ease: [0.22, 1, 0.36, 1]
+        ease: [0.22, 1, 0.36, 1],
       }}
       whileHover={{ scale: 1.02, y: -5 }}
       onHoverStart={() => setIsHovered(true)}
@@ -39,25 +51,30 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
         <CardHeader className="relative z-10">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-                <CardTitle className="mb-2">Exploring Modern Web Development</CardTitle>
-                <CardDescription>
-                  A deep dive into the latest trends and best practices in building scalable web applications
-                </CardDescription>
+              <CardTitle className="mb-2">
+                Exploring Modern Web Development
+              </CardTitle>
+              <CardDescription>
+                A deep dive into the latest trends and best practices in
+                building scalable web applications
+              </CardDescription>
             </div>
-            
+
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: index * 0.1 + 0.3, type: "spring", stiffness: 200 }}
+              transition={{
+                delay: index * 0.1 + 0.3,
+                type: "spring",
+                stiffness: 200,
+              }}
             >
-              <Badge className="text-white border-0">
-                Featured
-              </Badge>
+              <Badge className="text-white border-0">Featured</Badge>
             </motion.div>
           </div>
 
           {/* Stats row */}
-          <motion.div 
+          <motion.div
             className="flex gap-4 mt-4 text-sm text-gray-500 dark:text-gray-400"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -77,7 +94,7 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
             </div>
           </motion.div>
         </CardHeader>
-        
+
         <CardFooter className="flex gap-2 flex-wrap relative z-10">
           {["React", "Next.js", "TypeScript"].map((tag, i) => (
             <motion.div
@@ -87,7 +104,7 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
               transition={{
                 delay: index * 0.1 + 0.5 + i * 0.1,
                 type: "spring",
-                stiffness: 200
+                stiffness: 200,
               }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -102,7 +119,6 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
     </motion.div>
   );
 };
-
 
 const Dashboard = () => {
   const { resolvedTheme } = useTheme();
@@ -142,14 +158,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen relative">
-            <FlickeringGrid
-        className="absolute inset-0"
-        squareSize={4}
-        gridGap={6}
-        flickerChance={0.3}
-        color="rgb(100, 100, 100)"
-        maxOpacity={0.2}
-      />
       {/* Navbar */}
       <AnimatePresence>
         {isNavbar && (
@@ -175,11 +183,11 @@ const Dashboard = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-xl font-bold bg-gradient-to-r from-red-400 to-orange-200 bg-clip-text text-transparent"
                   >
-                    Dashboard
+                    Cryptrum
                   </motion.h1>
                 </div>
-                
-                <motion.div 
+
+                <motion.div
                   className="hidden md:flex items-center flex-1 max-w-md mx-8"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -194,9 +202,9 @@ const Dashboard = () => {
                       onFocus={() => setSearchFocused(true)}
                       onBlur={() => setSearchFocused(false)}
                       animate={{
-                        boxShadow: searchFocused 
-                          ? "0 0 0 3px rgba(147, 51, 234, 0.1)" 
-                          : "0 0 0 0px rgba(147, 51, 234, 0)"
+                        boxShadow: searchFocused
+                          ? "0 0 0 3px rgba(147, 51, 234, 0.1)"
+                          : "0 0 0 0px rgba(147, 51, 234, 0)",
                       }}
                     />
                   </div>
@@ -249,37 +257,25 @@ const Dashboard = () => {
             relative overflow-hidden
           `}
         >
-          
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-white bg-clip-text text-transparent relative z-10"
+          <ScrambledText
+            className="text-center"
+            radius={120}
+            duration={1}
+            speed={0.6}
+            scrambleChars="!@#$%^&*()_+"
+            style={{
+              color: "currentColor",
+              fontSize: "clamp(1rem, 3vw, 3rem)",
+              fontFamily: "inherit",
+              margin: "20px auto"
+            }}
           >
-            Welcome to Your Dashboard
-          </motion.h1>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mb-6 sm:mb-8 px-4 relative z-10"
-          >
-            Discover curated content, insights, and updates from across the platform
-          </motion.p>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 relative z-10"
-          >
-            <LiquidButton>
-              Create a Post
-            </LiquidButton>
+            Welcome to your Dashboard
+          </ScrambledText>
+
+            <LiquidButton>Create a Post</LiquidButton>
           </motion.div>
         </motion.div>
-      </motion.div>
 
       {/* Content Section */}
       <TracingBeam className="w-full min-h-screen px-4 sm:px-6">
@@ -289,7 +285,7 @@ const Dashboard = () => {
           ))}
         </div>
       </TracingBeam>
-          </div>
+    </div>
   );
 };
 
