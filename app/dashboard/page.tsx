@@ -20,6 +20,7 @@ import {
 } from "framer-motion";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import ScrambledText from "@/components/ui/shadcn-io/scrambled-text";
+import { Particles } from "@/components/ui/shadcn-io/particles";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -158,6 +159,14 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen relative">
+                    <Particles
+        className="absolute inset-0"
+        quantity={1000}
+        ease={80}
+        staticity={50}
+        color="#ffffff"
+        size={0.8}
+      />
       {/* Navbar */}
       <AnimatePresence>
         {isNavbar && (
