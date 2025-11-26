@@ -6,7 +6,8 @@ import { useTheme } from "next-themes";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { Menu, Search, Bell, User, TrendingUp, Clock, Eye } from "lucide-react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { InteractiveLight } from "@/components/ui/interactive-light";
+import { LiquidButton } from "@/components/ui/liquid-glass-button";
+import { FlickeringGrid } from "@/components/ui/shadcn-io/flickering-grid";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -141,6 +142,14 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen relative">
+            <FlickeringGrid
+        className="absolute inset-0"
+        squareSize={4}
+        gridGap={6}
+        flickerChance={0.3}
+        color="rgb(100, 100, 100)"
+        maxOpacity={0.2}
+      />
       {/* Navbar */}
       <AnimatePresence>
         {isNavbar && (
@@ -164,7 +173,7 @@ const Dashboard = () => {
                   <motion.h1
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="text-xl font-bold bg-gradient-to-r from-blue-500 to-red-200 bg-clip-text text-transparent"
+                    className="text-xl font-bold bg-gradient-to-r from-red-400 to-orange-200 bg-clip-text text-transparent"
                   >
                     Dashboard
                   </motion.h1>
@@ -265,19 +274,9 @@ const Dashboard = () => {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 relative z-10"
           >
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="px-6 sm:px-8 py-3 rounded-xl bg-gray-950 text-white font-semibold transition-all"
-            >
-              Get Started
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
-              whileTap={{ scale: 0.95 }}
-              className="px-6 sm:px-8 py-3 rounded-xl border border-white/20 font-semibold transition-all"
-            >
-              Learn More
-            </motion.button>
+            <LiquidButton>
+              Create a Post
+            </LiquidButton>
           </motion.div>
         </motion.div>
       </motion.div>
@@ -290,14 +289,7 @@ const Dashboard = () => {
           ))}
         </div>
       </TracingBeam>
-      
-      {/* <InteractiveLight
-        shineColor="#fff200"
-        lampHeight="10vh"
-        lampWidth="10vh"
-        transitionDuration={500} 
-      /> */}
-    </div>
+          </div>
   );
 };
 
