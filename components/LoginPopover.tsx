@@ -85,7 +85,6 @@ function AuthForm({
   const [username, setUsername] = React.useState<string>("");
   const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
   const recaptchaRef = React.useRef<ReCAPTCHA>(null);
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -103,7 +102,7 @@ function AuthForm({
 
     try {
       const response = isLogin
-        ? await authClient.signIn.email({ email, password })
+        ? await authClient.signIn.email({ email, password, callbackURL: "/dashboard" })
         : await authClient.signUp.email({
             email,
             password,
@@ -122,7 +121,7 @@ function AuthForm({
 
       recaptchaRef.current?.reset();
       console.log(isLogin ? "logged in" : "Signup success");
-      router.push("/dashboard");
+      // router.push("/dashboard");
       return resolve;
     } catch (err) {
       dispatch(setError(err instanceof Error ? err.message : "Unknown error"));

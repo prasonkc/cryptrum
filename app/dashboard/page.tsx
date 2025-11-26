@@ -166,16 +166,16 @@ const Dashboard = () => {
   const navGlass =
     resolvedTheme === "dark"
       ? "backdrop-blur-xl bg-black/80 border-b border-white/20 shadow-2xl"
-      : "backdrop-blur-xl bg-white/80 border-b border-black/20 shadow-2xl";
+      : "backdrop-blur-xl bg-gray/10 border-b border-black/20 shadow-2xl";
 
   return (
     <div className="min-h-screen relative">
       <Particles
         className="absolute inset-0"
-        quantity={1000}
+        quantity={300}
         ease={80}
         staticity={50}
-        color={resolvedTheme == "dark"? `#ffffff` : "#e47200"}
+        color={resolvedTheme == "dark"? `#ffffff` : "#000000"}
         size={1.2}
       />
       {/* Navbar */}

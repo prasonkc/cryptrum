@@ -273,7 +273,7 @@ export const Particles: React.FC<ParticlesProps> = ({
 
   return (
     <div
-      className={cn("pointer-events-none", className)}
+      className={cn("pointer-events-none dark:bg-gray-950 bg-gray-400", className)}
       ref={canvasContainerRef}
       aria-hidden="true"
     >
