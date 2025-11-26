@@ -31,6 +31,7 @@ import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import ScrambledText from "@/components/ui/shadcn-io/scrambled-text";
 import { Particles } from "@/components/ui/shadcn-io/particles";
 import { LampContainer } from "@/components/ui/lamp";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -49,7 +50,7 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
       whileHover={{ scale: 1.02, y: -5 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="w-full max-w-[600px]"
+      className="w-full max-w-[700px]"
     >
       <Card
         className={`
@@ -174,8 +175,8 @@ const Dashboard = () => {
         quantity={1000}
         ease={80}
         staticity={50}
-        color="#ffffff"
-        size={0.8}
+        color={resolvedTheme == "dark"? `#ffffff` : "#e47200"}
+        size={1.2}
       />
       {/* Navbar */}
       <AnimatePresence>
@@ -247,7 +248,10 @@ const Dashboard = () => {
                     whileTap={{ scale: 0.95 }}
                     className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                   >
-                    <User className="w-5 h-5" />
+                    <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
                   </motion.button>
                 </div>
               </div>
