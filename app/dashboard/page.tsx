@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { Menu, Search, Bell, User, TrendingUp, Clock, Eye } from "lucide-react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { InteractiveLight } from "@/components/ui/interactive-light";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -163,7 +164,7 @@ const Dashboard = () => {
                   <motion.h1
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent"
+                    className="text-xl font-bold bg-gradient-to-r from-blue-500 to-red-200 bg-clip-text text-transparent"
                   >
                     Dashboard
                   </motion.h1>
@@ -244,7 +245,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent relative z-10"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-white bg-clip-text text-transparent relative z-10"
           >
             Welcome to Your Dashboard
           </motion.h1>
@@ -265,9 +266,8 @@ const Dashboard = () => {
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 relative z-10"
           >
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)" }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 sm:px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold transition-all"
+              className="px-6 sm:px-8 py-3 rounded-xl bg-gray-950 text-white font-semibold transition-all"
             >
               Get Started
             </motion.button>
@@ -290,6 +290,13 @@ const Dashboard = () => {
           ))}
         </div>
       </TracingBeam>
+      
+      {/* <InteractiveLight
+        shineColor="#fff200"
+        lampHeight="10vh"
+        lampWidth="10vh"
+        transitionDuration={500} 
+      /> */}
     </div>
   );
 };
