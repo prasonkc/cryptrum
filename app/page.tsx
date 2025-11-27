@@ -14,6 +14,8 @@ import { useTheme } from "next-themes";
 import { RandomizedTextEffect } from '@/components/ui/text-randomized';
 import { RetroGrid } from "@/components/ui/shadcn-io/retro-grid";
 import { LoginPopover } from "@/components/LoginPopover";
+import {authClient} from "@/lib/auth-client"
+import { useRouter } from "next/navigation";
 
 const LandingPage = () => {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -34,8 +36,14 @@ const LandingPage = () => {
     }, 400);
   };
 
+  const router = useRouter();
+  const { data: session } = authClient.useSession()
   function handleMagneticButtonClick(){
-    setOpenLogin(!openLogin)
+    if(session){
+      router.push("/dashboard");
+    } else{
+      setOpenLogin(!openLogin)
+    }
   }
 
   return (
