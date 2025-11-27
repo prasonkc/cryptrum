@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "./generated/prisma/client";
 import { verifyRecaptcha } from "./verify-captcha";
-import {sendEmail} from "./sendemail";
+import { sendEmail } from "./sendemail";
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
@@ -35,6 +35,13 @@ export const auth = betterAuth({
         }
       }
     }
+  },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60 * 60, //Cache for every 5 hours
+      strategy: "jwt"
+    },
   },
   emailVerification: {
     enabled: true,
