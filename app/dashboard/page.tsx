@@ -32,6 +32,7 @@ import ScrambledText from "@/components/ui/shadcn-io/scrambled-text";
 import { Particles } from "@/components/ui/shadcn-io/particles";
 import { LampContainer } from "@/components/ui/lamp";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -142,6 +143,9 @@ const Dashboard = () => {
   const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -100]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
+
+    const router = useRouter();
+
 
   useEffect(() => {
     setMounted(true);
@@ -302,7 +306,21 @@ const Dashboard = () => {
                 ease: "easeInOut",
               }}
             >
-              <LiquidButton>
+              <LiquidButton className="m-5" onClick={() => {router.push("/profile")}}>
+                <motion.p
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.3,
+                    duration: 0.8,
+                    ease: "easeInOut",
+                  }}
+                >
+                  Check Profile
+                </motion.p>
+              </LiquidButton>
+  
+             <LiquidButton onClick={() => {router.push("/create-post")}}>
                 <motion.p
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
