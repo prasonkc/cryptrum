@@ -33,6 +33,11 @@ import { Particles } from "@/components/ui/shadcn-io/particles";
 import { LampContainer } from "@/components/ui/lamp";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -144,8 +149,7 @@ const Dashboard = () => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
 
-    const router = useRouter();
-
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -179,7 +183,7 @@ const Dashboard = () => {
         quantity={300}
         ease={80}
         staticity={50}
-        color={resolvedTheme == "dark"? `#ffffff` : "#000000"}
+        color={resolvedTheme == "dark" ? `#ffffff` : "#000000"}
         size={1.2}
       />
       {/* Navbar */}
@@ -235,28 +239,55 @@ const Dashboard = () => {
                 </motion.div>
 
                 <div className="flex items-center gap-2">
-                  <motion.button
+                  <motion.div
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
-                    className="p-2 rounded-lg hover:bg-white/10 transition-colors relative"
+                    className="p-2 rounded-lg transition-colors relative"
                   >
-                    <Bell className="w-5 h-5" />
+                    <Popover>
+                      <PopoverTrigger className="flex items-center justify-center">
+                          <Bell/>
+                      </PopoverTrigger>
+
+                      <PopoverContent className={`${glass} bg-gray-700 flex flex-col gap-2 cursor-alias`}>
+                        notifications goes here
+                      </PopoverContent>
+                      </Popover>
                     <motion.span
                       className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
-                  </motion.button>
-                  <motion.button
+                  </motion.div>
+
+                  <motion.div
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                   >
-                    <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </motion.button>
+                    <Popover>
+                      <PopoverTrigger>
+                        <Avatar>
+                          <AvatarImage src="https://github.com/shadcn.png" />
+                          <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                      </PopoverTrigger>
+
+                        <PopoverContent className={`${glass} bg-gray-700 w-25 py-3 px-5 m-0 flex flex-col gap-2 cursor-alias`}>
+                        <motion.div
+                          whileTap={{ scale: 0.90 }}
+                          onClick={() => {router.push("/profile")}}
+                        >
+                          Profile
+                        </motion.div>
+                        <motion.div
+                          whileTap={{ scale: 0.90 }}
+                        >
+                          Logout
+                        </motion.div>
+                      </PopoverContent>
+                    </Popover>
+                  </motion.div>
                 </div>
               </div>
             </div>
@@ -306,7 +337,12 @@ const Dashboard = () => {
                 ease: "easeInOut",
               }}
             >
-              <LiquidButton className="m-5" onClick={() => {router.push("/profile")}}>
+              <LiquidButton
+                className="m-5"
+                onClick={() => {
+                  router.push("/profile");
+                }}
+              >
                 <motion.p
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -319,8 +355,12 @@ const Dashboard = () => {
                   Check Profile
                 </motion.p>
               </LiquidButton>
-  
-             <LiquidButton onClick={() => {router.push("/create-post")}}>
+
+              <LiquidButton
+                onClick={() => {
+                  router.push("/create-post");
+                }}
+              >
                 <motion.p
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
