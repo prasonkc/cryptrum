@@ -249,7 +249,7 @@ const Dashboard = () => {
                           <Bell/>
                       </PopoverTrigger>
 
-                      <PopoverContent className={`${glass} bg-gray-700 flex flex-col gap-2 cursor-alias`}>
+                      <PopoverContent className={`${glass} dark:bg-gray-700 flex flex-col gap-2 cursor-alias`}>
                         notifications goes here
                       </PopoverContent>
                       </Popover>
@@ -273,7 +273,7 @@ const Dashboard = () => {
                         </Avatar>
                       </PopoverTrigger>
 
-                        <PopoverContent className={`${glass} bg-gray-700 w-25 py-3 px-5 m-0 flex flex-col gap-2 cursor-alias`}>
+                        <PopoverContent className={`${glass} dark:bg-gray-700 w-25 py-3 px-5 m-0 flex flex-col gap-2 cursor-alias`}>
                         <motion.div
                           whileTap={{ scale: 0.90 }}
                           onClick={() => {router.push("/profile")}}
@@ -370,7 +370,7 @@ const Dashboard = () => {
                     ease: "easeInOut",
                   }}
                 >
-                  Create a Post
+                  Share your thoughts
                 </motion.p>
               </LiquidButton>
             </motion.div>
