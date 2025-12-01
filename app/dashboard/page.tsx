@@ -6,7 +6,6 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "next-themes";
@@ -15,11 +14,9 @@ import {
   Menu,
   Search,
   Bell,
-  User,
   TrendingUp,
   Clock,
   Eye,
-  Bot,
 } from "lucide-react";
 import {
   motion,
