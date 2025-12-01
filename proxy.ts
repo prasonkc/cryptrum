@@ -11,5 +11,5 @@ const session = await auth.api.getSession({ headers: request.headers });
 }
 
 export const config = {
-  matcher: ["/dashboard"],
+  matcher: ["/dashboard", "/profile", "/create-post"],
 };

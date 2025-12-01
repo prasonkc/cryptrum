@@ -38,6 +38,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { authClient } from "@/lib/auth-client";
 
 const PostCard = ({ glass, index }: { glass: string; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -246,13 +247,15 @@ const Dashboard = () => {
                   >
                     <Popover>
                       <PopoverTrigger className="flex items-center justify-center">
-                          <Bell/>
+                        <Bell />
                       </PopoverTrigger>
 
-                      <PopoverContent className={`${glass} dark:bg-gray-700 flex flex-col gap-2 cursor-alias`}>
+                      <PopoverContent
+                        className={`${glass} dark:bg-gray-700 flex flex-col gap-2 cursor-alias`}
+                      >
                         notifications goes here
                       </PopoverContent>
-                      </Popover>
+                    </Popover>
                     <motion.span
                       className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"
                       animate={{ scale: [1, 1.2, 1] }}
@@ -273,15 +276,28 @@ const Dashboard = () => {
                         </Avatar>
                       </PopoverTrigger>
 
-                        <PopoverContent className={`${glass} dark:bg-gray-700 w-25 py-3 px-5 m-0 flex flex-col gap-2 cursor-alias`}>
+                      <PopoverContent
+                        className={`${glass} dark:bg-gray-700 w-25 py-3 px-5 m-0 flex flex-col gap-2 cursor-alias`}
+                      >
                         <motion.div
-                          whileTap={{ scale: 0.90 }}
-                          onClick={() => {router.push("/profile")}}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => {
+                            router.push("/profile");
+                          }}
                         >
                           Profile
                         </motion.div>
                         <motion.div
-                          whileTap={{ scale: 0.90 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={async () => {
+                            await authClient.signOut({
+                              fetchOptions: {
+                                onSuccess: () => {
+                                  router.push("/");
+                                },
+                              },
+                            });
+                          }}
                         >
                           Logout
                         </motion.div>
