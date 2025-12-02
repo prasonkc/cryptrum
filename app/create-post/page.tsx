@@ -1,14 +1,19 @@
 "use client"
-import React, { useState } from 'react'
+import React, { FormEventHandler, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 const CreatePost = () => {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
-  const handleSubmit = () => {
-    // Example: submit form to API
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+    if(!title || !content){
+      return
+    }
+    // submit form to API
     console.log({ title, content })
     router.push('/posts')
   }
