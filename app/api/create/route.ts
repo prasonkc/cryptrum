@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
     const { title, body, userId } = await req.json();
     const prisma = new PrismaClient();
 
-    const post = await prisma.post.create({
+    await prisma.post.create({
       data: {
         title,
         body,
@@ -14,8 +15,8 @@ export async function POST(req: Request) {
       },
     });
 
-    return Response.json({ message: "success", post });
+    return NextResponse.json({ message: "success" }, {status: 201});
   } catch (e) {
-    return Response.json({ error: String(e) }, { status: 500 });
+    return NextResponse.json({ error: String(e) }, { status: 500 });
   }
 }

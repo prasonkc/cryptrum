@@ -8,14 +8,22 @@ const CreatePost = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
-    if(!title || !content){
-      return
+    if (!title || !content) return
+
+    try {
+      await axios.post('/api/create', {
+        title,
+        body: content,
+        userId: "USER_ID"
+      })
+
+      // This will push to post later
+      router.push('/dashboard')
+    } catch (err) {
+      console.log(err)
     }
-    // submit form to API
-    console.log({ title, content })
-    router.push('/posts')
   }
 
   return (
