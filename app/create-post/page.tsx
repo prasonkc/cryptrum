@@ -1,28 +1,30 @@
-"use client"
-import React, { FormEventHandler, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import axios from 'axios'
+"use client";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { authClient } from "@/lib/auth-client";
 
 const CreatePost = () => {
-  const router = useRouter()
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const router = useRouter();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const { data: session, isPending } = authClient.useSession();
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
-    if (!title || !content) return
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title || !content || !session?.user?.id) return;
 
     try {
-      await axios.post('/api/create', {
+      await axios.post("/api/create", {
         title,
         body: content,
-        userId: "USER_ID"
-      })
+        userId: session.user.id,
+      });
 
       // This will push to post later
-      router.push('/dashboard')
+      router.push("/dashboard");
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 
