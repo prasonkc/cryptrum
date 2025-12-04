@@ -394,9 +394,10 @@ const Dashboard = () => {
       {/* Content Section */}
       <TracingBeam className="w-full min-h-screen px-4 sm:px-6">
         <div className="flex flex-col items-center gap-4 sm:gap-5 lg:gap-6 pt-4 pb-12">
-          {Array.from({ length: 10 }).map((_, i) => (
+          {/* Fetch the posts from the database */}
+          {/* {Array.from({ length: 10 }).map((_, i) => (
             <PostCard key={i} glass={glass} index={i} />
-          ))}
+          ))} */}
         </div>
       </TracingBeam>
     </div>
