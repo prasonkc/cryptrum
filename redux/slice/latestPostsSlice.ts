@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../store";
 
 interface Post {
   id: string;
@@ -12,10 +11,10 @@ interface Post {
 }
 
 interface LatestPostsSlice {
-  posts: Post[];}
+  value: Post[];}
 
 const initialState: LatestPostsSlice = {
-  posts: [],
+  value: [],
 };
 
 export const postsSlice = createSlice({
@@ -23,10 +22,10 @@ export const postsSlice = createSlice({
   initialState,
   reducers: {
     appendPosts: (state, action: PayloadAction<Post[]>) => {
-        state.posts = [...state.posts, ...action.payload];
+        state.value = [...state.value, ...action.payload];
     },
     resetPosts: (state) => {
-      state.posts = [];
+      state.value = [];
     }
 },
 });

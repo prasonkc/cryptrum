@@ -2,9 +2,9 @@ import axios from "axios";
 import { appendPosts } from "./slice/latestPostsSlice";
 import { AppDispatch, RootState } from './store';
 
-export const fetchPosts = async (dispatch: AppDispatch, getState: () => RootState) => {
+export const fetchPosts = () => async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const currentCount = state.posts.posts.length;
+    const currentCount = state.posts.value.length;
 
     const res = await axios.get("/api/get",{
     params: {

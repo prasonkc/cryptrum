@@ -36,8 +36,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { authClient } from "@/lib/auth-client";
+import { fetchPosts } from '../../redux/fetchPosts';
+import { resetPosts } from "@/redux/slice/latestPostsSlice";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 
-const PostCard = ({ glass, index }: { glass: string; index: number }) => {
+const PostCard = ({ glass, index, title, content }: { glass: string; index: number; title: string; content: string }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [views] = [0];
   const [likes] = [0];
@@ -68,11 +72,10 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <CardTitle className="mb-2">
-                Exploring Modern Web Development
+                {title}
               </CardTitle>
               <CardDescription>
-                A deep dive into the latest trends and best practices in
-                building scalable web applications
+                {content}
               </CardDescription>
             </div>
 
@@ -137,6 +140,8 @@ const PostCard = ({ glass, index }: { glass: string; index: number }) => {
 };
 
 const Dashboard = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const posts = useSelector((state: RootState) => state.posts.value);
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isNavbar, setIsNavbar] = useState(false);
@@ -151,16 +156,18 @@ const Dashboard = () => {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
 
-  useEffect(() => {
+    dispatch(resetPosts())
+    dispatch(fetchPosts())
+
     const handleScroll = () => {
       setIsNavbar(window.scrollY > 300);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+
+  }, [dispatch]);
 
   if (!mounted) return null;
 
@@ -395,9 +402,9 @@ const Dashboard = () => {
       <TracingBeam className="w-full min-h-screen px-4 sm:px-6">
         <div className="flex flex-col items-center gap-4 sm:gap-5 lg:gap-6 pt-4 pb-12">
           {/* Fetch the posts from the database */}
-          {/* {Array.from({ length: 10 }).map((_, i) => (
-            <PostCard key={i} glass={glass} index={i} />
-          ))} */}
+          {posts.map((post, i) => (
+            <PostCard key={i} glass={glass} index={i} title={post.title} content={post.body} />
+          ))}
         </div>
       </TracingBeam>
     </div>
