@@ -16,6 +16,11 @@ import { RetroGrid } from "@/components/ui/shadcn-io/retro-grid";
 import { LoginPopover } from "@/components/LoginPopover";
 import {authClient} from "@/lib/auth-client"
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { resetPosts } from "@/redux/slice/latestPostsSlice";
+import { fetchPosts } from '../redux/fetchPosts';
+import { useEffect } from "react";
 
 const LandingPage = () => {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -45,6 +50,14 @@ const LandingPage = () => {
       setOpenLogin(!openLogin)
     }
   }
+
+  const posts = useSelector((state: RootState) => state.posts.value);
+  const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    dispatch(resetPosts());
+    dispatch(fetchPosts());
+  }, []);
 
   return (
 <div
@@ -83,13 +96,13 @@ const LandingPage = () => {
         setApi={setApi}
       >
         <CarouselContent className="ml-1 mt-5">
-          {Array.from({ length: 5 }).map((_, index) => (
+          {posts.map((post, index) => (
             <CarouselItem
               key={index}
               className="pl-1 md:basis-1/2 lg:basis-1/3"
             >
               <div className="p-1">
-                <ForumCard />
+                <ForumCard title={post.title} content={post.body}/>
               </div>
             </CarouselItem>
           ))}
