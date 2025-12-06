@@ -57,7 +57,7 @@ const LandingPage = () => {
   useEffect(() => {
     dispatch(resetPosts());
     dispatch(fetchPosts());
-  }, []);
+  }, [dispatch]);
 
   return (
 <div

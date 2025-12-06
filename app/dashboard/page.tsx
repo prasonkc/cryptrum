@@ -297,6 +297,7 @@ const Dashboard = () => {
                 index={i}
                 title={post.title}
                 content={post.body}
+                onClick={router.push(`/post/${post.id}`)}
               />
             );
           })}
