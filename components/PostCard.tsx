@@ -16,11 +16,13 @@ const PostCard = ({
   index,
   title,
   content,
+  onClick,
 }: {
   glass: string;
   index: number;
   title: string;
   content: string;
+  onClick: () => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [views] = [0];
@@ -39,6 +41,7 @@ const PostCard = ({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       className="w-full max-w-[700px]"
+      onClick={onClick ? onClick : undefined}
     >
       <Card
         className={`
