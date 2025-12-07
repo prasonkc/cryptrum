@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface Post {
-  id: string;
+  id: number;
   title: string;
   body: string;
   status: string;
