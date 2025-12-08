@@ -41,7 +41,7 @@ const Dashboard = () => {
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
 
   const router = useRouter();
-
+  
   useEffect(() => {
     setMounted(true);
 

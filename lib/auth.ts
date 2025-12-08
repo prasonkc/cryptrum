@@ -41,19 +41,20 @@ export const auth = betterAuth({
       enabled: true,
       // Commented out for development purposes
       // maxAge: 5 * 60 * 60, //Cache for every 5 hours
-      strategy: "jwt"
+      strategy: "jwt",
     },
   },
   emailVerification: {
     enabled: true,
+    sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url }, request) => {
       await sendEmail({
         to: user.email,
         subject: "Verify your email",
         html: `
-          <p>Click to verify:</p>
-          <a href="${url}">${url}</a>
-        `,
+        <p>Click to verify your email:</p>
+        <a href="${url}">${url}</a>
+      `,
       });
     },
   },
