@@ -14,10 +14,12 @@ export async function sendEmail({
     port: 465,
     secure: true,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
     },
   });
+  console.log("EMAIL_USER:", process.env.EMAIL_USER);
+console.log("EMAIL_PASS is set:", !!process.env.EMAIL_PASS);
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
