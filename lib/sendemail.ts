@@ -18,11 +18,9 @@ export async function sendEmail({
       pass: process.env.SMTP_PASS,
     },
   });
-  console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_PASS is set:", !!process.env.EMAIL_PASS);
 
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: process.env.SMTP_USER,
     to,
     subject,
     html,
