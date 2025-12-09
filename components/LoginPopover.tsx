@@ -33,7 +33,7 @@ export function LoginPopover({ open, onOpenChange }: LoginPopoverProps) {
         className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
         onClick={() => onOpenChange(false)}
       />
-      
+
       {/* Login Form */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
@@ -82,6 +82,7 @@ function AuthForm({
 }) {
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+  const [passwordConfirmation, setPasswordConfirmation] = React.useState<string>("");
   const [username, setUsername] = React.useState<string>("");
   const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -95,6 +96,13 @@ function AuthForm({
       throw new Error("Missing email or password");
     }
 
+    if(!isLogin){
+      if(!(password == passwordConfirmation)){
+        dispatch(setError("Password doesn't match"));
+        throw new Error("Password doesn't match");
+      }
+    }
+
     if (!captchaToken) {
       dispatch(setError("Please complete the captcha"));
       return;
@@ -102,7 +110,11 @@ function AuthForm({
 
     try {
       const response = isLogin
-        ? await authClient.signIn.email({ email, password, callbackURL: "/dashboard" })
+        ? await authClient.signIn.email({
+            email,
+            password,
+            callbackURL: "/dashboard",
+          })
         : await authClient.signUp.email({
             email,
             password,
@@ -112,14 +124,14 @@ function AuthForm({
                 "x-captcha-response": captchaToken,
               },
             },
-          })
-          
-          if (response.error) {
-            dispatch(setError(response.error.message as string));
-            throw new Error(response.error.message);
-          }
-          recaptchaRef.current?.reset();
-          console.log(isLogin ? "logged in" : "Signup success");
+          });
+
+      if (response.error) {
+        dispatch(setError(response.error.message as string));
+        throw new Error(response.error.message);
+      }
+      recaptchaRef.current?.reset();
+      console.log(isLogin ? "logged in" : "Signup success");
       // router.push("/dashboard");
       return resolve;
     } catch (err) {
@@ -190,6 +202,20 @@ function AuthForm({
           }}
         />
       </div>
+
+      {!isLogin && (
+        <div className="grid gap-3">
+          <Label htmlFor="password-confirm">Password</Label>
+          <Input
+            id="password-confirm"
+            type="password"
+            placeholder="Confirm Your password"
+            onChange={(e) => {
+              setPasswordConfirmation(e.target.value);
+            }}
+          />
+        </div>
+      )}
 
       <div className="m-auto">
         <ReCAPTCHA
