@@ -1,37 +1,51 @@
 "use client";
-import React, { use, useState } from "react";
+
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
-const ResetPassword = () => {
-  const [email, setEmail] = useState<string>("");
-  return (
-    <div>
-      <form action="POST">
-        <input
-          type="email"
-          placeholder="example@yourmail.com"
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        />
-        <button
-          onClick={async (e) => {
-            e.preventDefault();
-            const { data, error } = await authClient.requestPasswordReset({
-              email: email,
-              redirectTo: "/reset-password",
-            });
+export default function ResetPasswordPage() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
-            if(error){
-                console.log(error)
-            }
-          }}
-        >
-          Reset your password
-        </button>
-      </form>
-    </div>
+  const [newPassword, setNewPassword] = useState("");
+  const [status, setStatus] = useState<"checking" | "ready" | "error">(
+    token ? "ready" : "error"
   );
-};
 
-export default ResetPassword;
+  async function handleUpdate(e: React.FormEvent) {
+    e.preventDefault();
+
+    if (!token) {
+      setStatus("error");
+      return;
+    }
+
+    const { error } = await authClient.updatePassword({
+      token,
+      newPassword,
+    });
+
+    if (error) {
+      console.log(error);
+      setStatus("error");
+    } else {
+      console.log("Password reset success");
+      setStatus("ready");
+    }
+  }
+
+  if (status === "error")
+    return <p>Invalid or expired reset link.</p>;
+
+  return (
+    <form onSubmit={handleUpdate}>
+      <input
+        type="password"
+        placeholder="New password"
+        onChange={(e) => setNewPassword(e.target.value)}
+      />
+      <button type="submit">Update Password</button>
+    </form>
+  );
+}
