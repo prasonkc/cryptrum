@@ -15,11 +15,33 @@ export default function RequestResetPage() {
   const [email, setEmail] = useState("");
   const recaptchaRef = React.useRef<ReCAPTCHA>(null);
   const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
+  const [cooldown, setCooldown] = useState(0);
+  const cooldownRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
 
+  function startCooldown() {
+    setCooldown(60);
+    if (cooldownRef.current) clearInterval(cooldownRef.current);
+
+    cooldownRef.current = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          if (cooldownRef.current) clearInterval(cooldownRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (cooldown > 0) {
+      dispatch(setError(`Please wait ${cooldown}s before trying again`));
+      return;
+    }
 
     if (!captchaToken) {
       dispatch(setError("Please complete the captcha"));
@@ -35,6 +57,7 @@ export default function RequestResetPage() {
       dispatch(setError(error.message as string));
     } else {
       alert("Please check your email");
+      startCooldown();
     }
   }
 
@@ -59,7 +82,6 @@ export default function RequestResetPage() {
               className="w-[80%] mx-auto"
             />
           </div>
-
           <div className="m-auto">
             <ReCAPTCHA
               ref={recaptchaRef}
@@ -67,14 +89,14 @@ export default function RequestResetPage() {
               onChange={handleCaptchaChange}
             />
           </div>
-
           <Button
             type="button"
             variant="outline"
+            disabled={cooldown > 0}
             className="w-[30%] hover:scale-105 transition-all cursor-pointer mx-auto"
             onClick={handleSubmit}
           >
-            Send Link
+            {cooldown > 0 ? `Wait ${cooldown}s` : "Send Link"}
           </Button>
         </div>
       </form>
