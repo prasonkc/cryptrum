@@ -3,14 +3,24 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchPosts } from "@/redux/fetchPosts";
 
 const Post = () => {
   const pathname = usePathname();
-  const id = Number(pathname.split("/").pop());
+  const id = pathname.split("/").pop();
+  const dispatch = useDispatch<AppDispatch>();
   const posts = useSelector((state: RootState) => state.posts.value);
 
-  const post = posts.find((p) => p.id === id);
+  useEffect(() => {
+    if (posts.length === 0) {
+      dispatch(fetchPosts());
+    }
+  }, [dispatch, posts.length]);
+
+  const post = posts.find((p) => Number(p.id) === Number(id));
 
   if (!post) {
     return <div>Post not found</div>;
