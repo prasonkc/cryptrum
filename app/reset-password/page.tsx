@@ -21,7 +21,7 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    const { error } = await authClient.updatePassword({
+    const { error } = await authClient.resetPassword({
       token,
       newPassword,
     });
