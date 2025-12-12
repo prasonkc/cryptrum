@@ -3,6 +3,10 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { AppDispatch } from "@/redux/store";
+import { setError } from "@/redux/slice/ErrorSlice";
+import { useDispatch } from "react-redux";
+
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
@@ -12,6 +16,8 @@ export default function ResetPasswordPage() {
   const [status, setStatus] = useState<"checking" | "ready" | "error">(
     token ? "ready" : "error"
   );
+  
+  const dispatch = useDispatch<AppDispatch>()
 
   async function handleUpdate(e: React.FormEvent) {
     e.preventDefault();
@@ -27,7 +33,7 @@ export default function ResetPasswordPage() {
     });
 
     if (error) {
-      console.log(error);
+      dispatch(setError(error.message as string))
       setStatus("error");
     } else {
       console.log("Password reset success");
