@@ -26,7 +26,6 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import PostCard from "@/components/PostCard";
-import { auth } from "@/lib/auth";
 
 const Dashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -248,14 +247,7 @@ const Dashboard = () => {
               <LiquidButton
                 className="m-5"
                 onClick={async () => {
-                  // router.push("/profile");
-                  const session = await authClient.getSession(
-
-                  )
-                  await authClient.sendVerificationEmail({
-                    email: session.data?.user.email as string,
-                    callbackURL: "/dashboard", // The redirect URL after verification
-                  });
+                  router.push("/profile");
                 }}
               >
                 <motion.p
