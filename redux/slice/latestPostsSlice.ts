@@ -8,6 +8,7 @@ interface Post {
   status: string;
   createdAt: string;
   updatedAt: string
+  plainText: string;
 }
 
 interface LatestPostsSlice {

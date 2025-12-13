@@ -3,7 +3,7 @@ import { prisma } from '../../../lib/prisma';
 
 export async function POST(req: Request) {
   try {
-    const { title, body, userId } = await req.json();
+    const { title, body, userId, plainText } = await req.json();
 
     const post = await prisma.post.create({
       data: {
@@ -11,6 +11,7 @@ export async function POST(req: Request) {
         body,
         status: "pending",
         userId,
+        plainText: plainText,
       },
     });
 

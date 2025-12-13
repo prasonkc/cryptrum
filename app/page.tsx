@@ -21,7 +21,6 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { resetPosts } from "@/redux/slice/latestPostsSlice";
 import { fetchPosts } from "../redux/fetchPosts";
 import { useEffect } from "react";
-import { lexicalJsonToText } from "@/lib/lexicalToText";
 
 const LandingPage = () => {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -59,14 +58,6 @@ const LandingPage = () => {
     dispatch(resetPosts());
     dispatch(fetchPosts());
   }, [dispatch]);
-
-  useEffect(() => {
-  if (!posts.length) return;
-
-  posts.forEach((post) => {
-    post.plainText = lexicalJsonToText(post.body);
-  });
-}, [posts]);
 
   return (
     <div
@@ -119,7 +110,7 @@ const LandingPage = () => {
               className="pl-1 md:basis-1/2 lg:basis-1/3"
             >
               <div className="p-1">
-                <ForumCard title={post.title} content={post.body} />
+                <ForumCard title={post.title} content={post.plainText} />
               </div>
             </CarouselItem>
           ))}

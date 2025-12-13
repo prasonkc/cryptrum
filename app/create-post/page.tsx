@@ -4,6 +4,7 @@ import axios from "axios";
 import { authClient } from "@/lib/auth-client";
 import { Editor } from "@/components/blocks/editor-00/editor";
 import { SerializedEditorState } from "lexical";
+import { lexicalJsonToText } from "@/lib/lexicalToText";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -19,6 +20,7 @@ const CreatePost = () => {
         title,
         body: JSON.stringify(editorState),
         userId: session.user.id,
+        plainText: lexicalJsonToText(JSON.stringify(editorState)),
       });
 
       const postId = Number(res.data.post.id);
