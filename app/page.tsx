@@ -22,6 +22,14 @@ import { resetPosts } from "@/redux/slice/latestPostsSlice";
 import { fetchPosts } from '../redux/fetchPosts';
 import { useEffect } from "react";
 
+
+
+
+// Convert lexicaljson to html for displaying posts
+
+
+
+
 const LandingPage = () => {
   const [api, setApi] = React.useState<CarouselApi>();
   const { resolvedTheme } = useTheme();

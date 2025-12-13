@@ -61,7 +61,6 @@ const lexicalToHtmlSlice = createSlice({
     clearLexicalHtmlCache: (state) => {
       state.cache = {};
     },
-    
   },
 });
 
