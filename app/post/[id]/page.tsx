@@ -54,11 +54,10 @@ const lexicalToHtml = (serializedState: string) => {
     return <div>Post not found</div>;
   }
   return (
-    <div>
-      <div>{post.title}</div>
-      <div>{post.body}</div>
-    </div>
-  );
+    <div className="max-w-2xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: lexicalToHtml(post.body) }} />
+    </div>  );
 };
 
 export default Post;
