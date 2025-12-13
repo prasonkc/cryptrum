@@ -76,7 +76,13 @@ export function BlockFormatDropDown({
         {blockTypeToBlockName[blockType].icon}
         <span>{blockTypeToBlockName[blockType].label}</span>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        position="popper"
+        side="left"
+        align="start"
+        sideOffset={4}
+        className="z-[100]"
+      >
         <SelectGroup>{children}</SelectGroup>
       </SelectContent>
     </Select>
