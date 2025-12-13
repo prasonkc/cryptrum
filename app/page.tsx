@@ -11,24 +11,17 @@ import Autoplay from "embla-carousel-autoplay";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import Earth from "@/components/ui/globe";
 import { useTheme } from "next-themes";
-import { RandomizedTextEffect } from '@/components/ui/text-randomized';
+import { RandomizedTextEffect } from "@/components/ui/text-randomized";
 import { RetroGrid } from "@/components/ui/shadcn-io/retro-grid";
 import { LoginPopover } from "@/components/LoginPopover";
-import {authClient} from "@/lib/auth-client"
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { resetPosts } from "@/redux/slice/latestPostsSlice";
-import { fetchPosts } from '../redux/fetchPosts';
+import { fetchPosts } from "../redux/fetchPosts";
 import { useEffect } from "react";
-
-
-
-
-// Convert lexicaljson to html for displaying posts
-
-
-
+import { lexicalJsonToText } from "@/lib/lexicalToText";
 
 const LandingPage = () => {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -50,31 +43,52 @@ const LandingPage = () => {
   };
 
   const router = useRouter();
-  const { data: session } = authClient.useSession()
-  function handleMagneticButtonClick(){
-    if(session){
+  const { data: session } = authClient.useSession();
+  function handleMagneticButtonClick() {
+    if (session) {
       router.push("/dashboard");
-    } else{
-      setOpenLogin(!openLogin)
+    } else {
+      setOpenLogin(!openLogin);
     }
   }
 
   const posts = useSelector((state: RootState) => state.posts.value);
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(resetPosts());
     dispatch(fetchPosts());
   }, [dispatch]);
 
-  return (
-<div
-  className="min-h-screen flex flex-col overflow-hidden"
-  onWheel={handleScroll}
->      <div className="main-content flex flex-col items-center justify-center pt-20 gap-6">
-        <h1 className="heading text-center text-3xl">Welcome to the <b> <RandomizedTextEffect text='Encrypted'/></b> Forum</h1>
+  useEffect(() => {
+  if (!posts.length) return;
 
-        <MagneticButton variant={"outline"} className="cursor-pointer" onClick={handleMagneticButtonClick}>
+  posts.forEach((post) => {
+    post.plainText = lexicalJsonToText(post.body);
+  });
+}, [posts]);
+
+  return (
+    <div
+      className="min-h-screen flex flex-col overflow-hidden"
+      onWheel={handleScroll}
+    >
+      {" "}
+      <div className="main-content flex flex-col items-center justify-center pt-20 gap-6">
+        <h1 className="heading text-center text-3xl">
+          Welcome to the{" "}
+          <b>
+            {" "}
+            <RandomizedTextEffect text="Encrypted" />
+          </b>{" "}
+          Forum
+        </h1>
+
+        <MagneticButton
+          variant={"outline"}
+          className="cursor-pointer"
+          onClick={handleMagneticButtonClick}
+        >
           Login
         </MagneticButton>
 
@@ -84,19 +98,14 @@ const LandingPage = () => {
           <Earth
             dark={resolvedTheme === "dark" ? 1 : 0.05}
             baseColor={
-              resolvedTheme === "dark"
-                ? [0.25, 0.55, 1.0]
-                : [0.88, 0.88, 0.88]
+              resolvedTheme === "dark" ? [0.25, 0.55, 1.0] : [0.88, 0.88, 0.88]
             }
             glowColor={
-              resolvedTheme === "dark"
-                ? [0.27, 0.58, 0.9]
-                : [0.01, 0.01, 0.01]
+              resolvedTheme === "dark" ? [0.27, 0.58, 0.9] : [0.01, 0.01, 0.01]
             }
           />
         </div>
       </div>
-
       <Carousel
         className="w-full max-w-[70%] mx-auto md:mt-10"
         opts={{ align: "start", loop: true }}
@@ -110,21 +119,20 @@ const LandingPage = () => {
               className="pl-1 md:basis-1/2 lg:basis-1/3"
             >
               <div className="p-1">
-                <ForumCard title={post.title} content={post.body}/>
+                <ForumCard title={post.title} content={post.body} />
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
       </Carousel>
-
       <RetroGrid
-      className="md:flex hidden"
-      angle={70}
-      cellSize={100}
-      opacity={0.3}
-      lightLineColor="#64748b"
-      darkLineColor="#475569"
-    />
+        className="md:flex hidden"
+        angle={70}
+        cellSize={100}
+        opacity={0.3}
+        lightLineColor="#64748b"
+        darkLineColor="#475569"
+      />
     </div>
   );
 };
