@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchPosts } from "@/redux/fetchPosts";
 import { convertLexicalToHtml } from "@/redux/slice/LexicalToHTML";
+import { selectHtmlByPostId } from "@/redux/slice/LexicalToHTML";
 
 const Post = () => {
   const pathname = usePathname();
@@ -23,14 +24,25 @@ const Post = () => {
 
   const post = posts.find((p) => Number(p.id) === Number(id));
 
+  useEffect(() => {
+    if (post?.body) {
+      dispatch(
+        convertLexicalToHtml({ key: `post-${post.id}`, lexicalJson: post.body })
+      );
+    }
+  }, [dispatch, post]);
+
+  const html = useSelector(selectHtmlByPostId(Number(id)));
+
   if (!post) {
     return <div>Post not found</div>;
   }
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: dispatch(convertLexicalToHtml(post.body)) }} />
-    </div>  );
+      <div dangerouslySetInnerHTML={{ __html: html }} />
+    </div>
+  );
 };
 
 export default Post;

@@ -4,6 +4,7 @@ import { $generateHtmlFromNodes } from "@lexical/html";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { LinkNode } from "@lexical/link";
+import { RootState } from "../store";
 
 // Check if string is Lexical JSON
 const isLexicalJson = (value: string) => {
@@ -60,10 +61,14 @@ const lexicalToHtmlSlice = createSlice({
     clearLexicalHtmlCache: (state) => {
       state.cache = {};
     },
+    
   },
 });
 
 export const { convertLexicalToHtml, clearLexicalHtmlCache } =
   lexicalToHtmlSlice.actions;
+
+  export const selectHtmlByPostId = (postId: number) => (state: RootState) =>
+  state.lexicalToHtml.cache[`post-${postId}`] ?? "";
 
 export default lexicalToHtmlSlice.reducer;
