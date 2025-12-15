@@ -21,7 +21,6 @@ import { ContentEditable } from "@/components/editor/editor-ui/content-editable"
 import { ElementFormatToolbarPlugin } from "@/components/editor/plugins/toolbar/element-format-toolbar-plugin";
 import { FontColorToolbarPlugin } from "@/components/editor/plugins/toolbar/font-color-toolbar-plugin";
 import { FontBackgroundToolbarPlugin } from "@/components/editor/plugins/toolbar/font-background-toolbar-plugin";
-import { FontFamilyToolbarPlugin } from "@/components/editor/plugins/toolbar/font-family-toolbar-plugin";
 import { FontFormatToolbarPlugin } from "@/components/editor/plugins/toolbar/font-format-toolbar-plugin";
 import { FontSizeToolbarPlugin } from "@/components/editor/plugins/toolbar/font-size-toolbar-plugin";
 
@@ -50,7 +49,6 @@ export function Plugins() {
 
             <Separator orientation="vertical" className="mx-1 h-6" />
 
-            <FontFamilyToolbarPlugin />
             <FontSizeToolbarPlugin />
 
             <Separator orientation="vertical" className="mx-1 h-6" />
