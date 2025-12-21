@@ -7,6 +7,8 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { fetchPosts } from "@/redux/fetchPosts";
 import { convertLexicalToHtml } from "@/redux/slice/LexicalToHTML";
 import { selectHtmlByPostId } from "@/redux/slice/LexicalToHTML";
+import axios from "axios";
+import { authClient } from "@/lib/auth-client";
 
 const Post = () => {
   const pathname = usePathname();
@@ -60,9 +62,20 @@ const Post = () => {
             />
             <div className="flex justify-end mt-2">
               <button className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault()
-                console.log("comment added")
+
+                const { data: session } = await authClient.useSession()
+
+                await axios.post('/api/create-comment', {
+                  postId: Number(id),
+                  userId: session?.user.id,
+                  content: "Sample comment content" // Replace with actual comment
+                }).then(response => {
+                  console.log('Comment created:', response.data);
+                }).catch(error => {
+                  console.error('Error creating comment:', error);
+                });
               }}>
                 Post Comment
               </button>
