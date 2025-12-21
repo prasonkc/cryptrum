@@ -15,6 +15,8 @@ const Post = () => {
   const id = pathname.split("/").pop();
   const dispatch = useDispatch<AppDispatch>();
   const posts = useSelector((state: RootState) => state.posts.value);
+  const { data: session } = authClient.useSession()
+  const [comment, setComment] = React.useState("");
 
   useEffect(() => {
     if (posts.length === 0) {
@@ -59,18 +61,17 @@ const Post = () => {
               placeholder="Write a comment..."
               className="w-full bg-black border border-gray-700 rounded-lg p-3 resize-none focus:outline-none focus:ring focus:ring-gray-600 text-white"
               rows={3}
+              onChange={(e) => {setComment(e.target.value)}}
             />
             <div className="flex justify-end mt-2">
               <button className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200"
               onClick={async (e) => {
                 e.preventDefault()
 
-                const { data: session } = await authClient.useSession()
-
                 await axios.post('/api/create-comment', {
                   postId: Number(id),
                   userId: session?.user.id,
-                  content: "Sample comment content" // Replace with actual comment
+                  content: comment 
                 }).then(response => {
                   console.log('Comment created:', response.data);
                 }).catch(error => {
@@ -83,14 +84,14 @@ const Post = () => {
           </div>
 
           {/* Comment List */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <div className="border border-gray-700 rounded-lg p-4 bg-gray-800">
               <div className="text-sm font-medium">Username</div>
               <div className="text-sm text-gray-400 mt-1">
-                Sample comment
+                {comment}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
