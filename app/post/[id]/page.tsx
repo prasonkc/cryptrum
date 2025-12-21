@@ -71,7 +71,7 @@ const Post = () => {
                 await axios.post('/api/create-comment', {
                   postId: Number(id),
                   userId: session?.user.id,
-                  content: comment 
+                  content: comment
                 }).then(response => {
                   console.log('Comment created:', response.data);
                 }).catch(error => {
@@ -84,14 +84,14 @@ const Post = () => {
           </div>
 
           {/* Comment List */}
-          {/* <div className="space-y-4">
+          <div className="space-y-4">
             <div className="border border-gray-700 rounded-lg p-4 bg-gray-800">
               <div className="text-sm font-medium">Username</div>
               <div className="text-sm text-gray-400 mt-1">
                 {comment}
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
