@@ -49,7 +49,7 @@ const Post = () => {
       .catch((err) => {
         console.error("Error fetching comments:", err);
       });
-  }, [id, comment]);
+  }, );
 
   const html = useSelector(selectHtmlByPostId(Number(id)));
 
@@ -107,8 +107,8 @@ const Post = () => {
           {/* Comment List */}
           <div className="space-y-4">
             {postComments.map((comment) => {
-              const name = comment.user.name || "User";
-              const initial = name.charAt(0).toUpperCase();
+              const name = comment.user.name;
+              const initial = name.charAt(0).toUpperCase() + name.charAt(1).toUpperCase();
 
               return (
                 <div
