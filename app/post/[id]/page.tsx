@@ -17,7 +17,7 @@ const Post = () => {
   const posts = useSelector((state: RootState) => state.posts.value);
   const { data: session } = authClient.useSession();
   const [comment, setComment] = React.useState("");
-  const [postComments, setPostComments] = React.useState([]);
+  const [postComments, setPostComments] = React.useState<any[]>([]);
 
   useEffect(() => {
     if (posts.length === 0) {
@@ -35,16 +35,20 @@ const Post = () => {
     }
   }, [dispatch, post]);
 
-  useEffect(() => {
-    axios
-      .get("/api/get-comment")
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching comments:", error);
-      });
-  }, []);
+useEffect(() => {
+  if (!id) return;
+
+  axios
+    .get("/api/get-comment", {
+      params: { postId: id },
+    })
+    .then((res) => {
+      setPostComments(res.data);
+    })
+    .catch((err) => {
+      console.error("Error fetching comments:", err);
+    });
+}, [id]);
 
   const html = useSelector(selectHtmlByPostId(Number(id)));
 
@@ -104,10 +108,12 @@ const Post = () => {
 
           {/* Comment List */}
           <div className="space-y-4">
-            <div className="border border-gray-700 rounded-lg p-4 bg-gray-800">
-              <div className="text-sm font-medium">{}</div>
-              <div className="text-sm text-gray-400 mt-1">{comment}</div>
-            </div>
+            {postComments.map((comment) => (
+              <div key={comment.id} className="border border-gray-700 rounded-lg p-4 bg-gray-800">
+                <div className="text-sm font-medium">{comment.user.name}</div>
+                <div className="text-sm text-gray-400 mt-1">{comment.content}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
