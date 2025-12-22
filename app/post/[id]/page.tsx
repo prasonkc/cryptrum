@@ -15,8 +15,9 @@ const Post = () => {
   const id = pathname.split("/").pop();
   const dispatch = useDispatch<AppDispatch>();
   const posts = useSelector((state: RootState) => state.posts.value);
-  const { data: session } = authClient.useSession()
+  const { data: session } = authClient.useSession();
   const [comment, setComment] = React.useState("");
+  const [postComments, setPostComments] = React.useState([]);
 
   useEffect(() => {
     if (posts.length === 0) {
@@ -33,6 +34,17 @@ const Post = () => {
       );
     }
   }, [dispatch, post]);
+
+  useEffect(() => {
+    axios
+      .get("/api/get-comment")
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching comments:", error);
+      });
+  }, []);
 
   const html = useSelector(selectHtmlByPostId(Number(id)));
 
@@ -51,7 +63,7 @@ const Post = () => {
       </div>
 
       {/* Comments section */}
-      <div className="text-white" >
+      <div className="text-white">
         <div className="max-w-2xl mx-auto p-6">
           <h2 className="text-xl font-semibold mb-4">Comments</h2>
 
@@ -61,23 +73,30 @@ const Post = () => {
               placeholder="Write a comment..."
               className="w-full bg-black border border-gray-700 rounded-lg p-3 resize-none focus:outline-none focus:ring focus:ring-gray-600 text-white"
               rows={3}
-              onChange={(e) => {setComment(e.target.value)}}
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
             />
             <div className="flex justify-end mt-2">
-              <button className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200"
-              onClick={async (e) => {
-                e.preventDefault()
+              <button
+                className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200"
+                onClick={async (e) => {
+                  e.preventDefault();
 
-                await axios.post('/api/create-comment', {
-                  postId: Number(id),
-                  userId: session?.user.id,
-                  content: comment
-                }).then(response => {
-                  console.log('Comment created:', response.data);
-                }).catch(error => {
-                  console.error('Error creating comment:', error);
-                });
-              }}>
+                  await axios
+                    .post("/api/create-comment", {
+                      postId: Number(id),
+                      userId: session?.user.id,
+                      content: comment,
+                    })
+                    .then((response) => {
+                      console.log("Comment created:", response.data);
+                    })
+                    .catch((error) => {
+                      console.error("Error creating comment:", error);
+                    });
+                }}
+              >
                 Post Comment
               </button>
             </div>
@@ -86,10 +105,8 @@ const Post = () => {
           {/* Comment List */}
           <div className="space-y-4">
             <div className="border border-gray-700 rounded-lg p-4 bg-gray-800">
-              <div className="text-sm font-medium">Username</div>
-              <div className="text-sm text-gray-400 mt-1">
-                {comment}
-              </div>
+              <div className="text-sm font-medium">{}</div>
+              <div className="text-sm text-gray-400 mt-1">{comment}</div>
             </div>
           </div>
         </div>
