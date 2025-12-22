@@ -9,6 +9,7 @@ import { convertLexicalToHtml } from "@/redux/slice/LexicalToHTML";
 import { selectHtmlByPostId } from "@/redux/slice/LexicalToHTML";
 import axios from "axios";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 const Post = () => {
   const pathname = usePathname();
@@ -35,27 +36,26 @@ const Post = () => {
     }
   }, [dispatch, post]);
 
-useEffect(() => {
-  if (!id) return;
+  useEffect(() => {
+    if (!id) return;
 
-  axios
-    .get("/api/get-comment", {
-      params: { postId: id },
-    })
-    .then((res) => {
-      setPostComments(res.data);
-    })
-    .catch((err) => {
-      console.error("Error fetching comments:", err);
-    });
-}, [id]);
+    axios
+      .get("/api/get-comment", {
+        params: { postId: id },
+      })
+      .then((res) => {
+        setPostComments(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching comments:", err);
+      });
+  }, [id, comment]);
 
   const html = useSelector(selectHtmlByPostId(Number(id)));
 
   if (!post) {
     return <div>Post not found</div>;
   }
-
   return (
     <div>
       {/* Post section */}
@@ -70,7 +70,6 @@ useEffect(() => {
       <div className="text-white">
         <div className="max-w-2xl mx-auto p-6">
           <h2 className="text-xl font-semibold mb-4">Comments</h2>
-
           {/* New Comment */}
           <div className="mb-6">
             <textarea
@@ -105,15 +104,44 @@ useEffect(() => {
               </button>
             </div>
           </div>
-
           {/* Comment List */}
           <div className="space-y-4">
-            {postComments.map((comment) => (
-              <div key={comment.id} className="border border-gray-700 rounded-lg p-4 bg-gray-800">
-                <div className="text-sm font-medium">{comment.user.name}</div>
-                <div className="text-sm text-gray-400 mt-1">{comment.content}</div>
-              </div>
-            ))}
+            {postComments.map((comment) => {
+              const name = comment.user.name || "User";
+              const initial = name.charAt(0).toUpperCase();
+
+              return (
+                <div
+                  key={comment.id}
+                  className="border border-gray-700 rounded-lg p-4 bg-gray-800 flex gap-3"
+                >
+                  {/* Avatar */}
+                  {comment.user.image ? (
+                    <Image
+                      src={comment.user.image}
+                      alt={name}
+                      width={32}
+                      height={32}
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-semibold text-white">
+                      {initial}
+                    </div>
+                  )}
+
+                  {/* Content */}
+                  <div>
+                    <div className="text-sm font-medium text-gray-100">
+                      {name}
+                    </div>
+                    <div className="text-sm text-gray-400 mt-1">
+                      {comment.content}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
