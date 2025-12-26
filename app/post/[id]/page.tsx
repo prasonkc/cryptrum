@@ -10,6 +10,7 @@ import { selectHtmlByPostId } from "@/redux/slice/LexicalToHTML";
 import axios from "axios";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Post = () => {
   const pathname = usePathname();
@@ -19,6 +20,7 @@ const Post = () => {
   const { data: session } = authClient.useSession();
   const [comment, setComment] = React.useState("");
   const [postComments, setPostComments] = React.useState<any[]>([]);
+  const router = useRouter()
 
   useEffect(() => {
     if (posts.length === 0) {
@@ -54,7 +56,8 @@ const Post = () => {
   const html = useSelector(selectHtmlByPostId(Number(id)));
 
   if (!post) {
-    return <div>Post not found</div>;
+    router.push("/404");
+    return
   }
   return (
     <div>

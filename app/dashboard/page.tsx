@@ -42,7 +42,6 @@ const Dashboard = () => {
 
   const router = useRouter();
   const { data: session } = authClient.useSession();
-  // Ensure we have a valid image path - if it's a relative path, it should work with Next.js
   const displayImage = session?.user.image ? session.user.image : "";
   const displayName = session?.user.name || "";
   const initials = displayName.charAt(0).toUpperCase() + (displayName.charAt(1)?.toUpperCase() || "");
