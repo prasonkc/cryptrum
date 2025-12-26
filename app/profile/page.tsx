@@ -38,6 +38,12 @@ const Profile = () => {
       if (response.data.user) {
         if (response.data.user.name) setLocalName(response.data.user.name);
         if (response.data.user.image !== undefined) setLocalImage(response.data.user.image || "");
+        
+        // Refresh the session to get updated user data
+        await authClient.getSession();
+        // Force a page reload to ensure session is refreshed across all pages
+        // This ensures the avatar persists after refresh
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error updating profile:", error);

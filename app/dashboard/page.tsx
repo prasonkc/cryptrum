@@ -41,6 +41,11 @@ const Dashboard = () => {
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
 
   const router = useRouter();
+  const { data: session } = authClient.useSession();
+  // Ensure we have a valid image path - if it's a relative path, it should work with Next.js
+  const displayImage = session?.user.image ? session.user.image : "";
+  const displayName = session?.user.name || "";
+  const initials = displayName.charAt(0).toUpperCase() + (displayName.charAt(1)?.toUpperCase() || "");
 
   useEffect(() => {
     setMounted(true);
@@ -162,8 +167,8 @@ const Dashboard = () => {
                     <Popover>
                       <PopoverTrigger>
                         <Avatar>
-                          <AvatarImage src="https://github.com/shadcn.png" />
-                          <AvatarFallback>CN</AvatarFallback>
+                          <AvatarImage src={displayImage} />
+                          <AvatarFallback>{initials}</AvatarFallback>
                         </Avatar>
                       </PopoverTrigger>
 
