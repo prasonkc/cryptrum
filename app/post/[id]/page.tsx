@@ -120,8 +120,8 @@ const Post = () => {
                     <Image
                       src={comment.user.image}
                       alt={name}
-                      width={32}
-                      height={32}
+                      width={50}
+                      height={50}
                       className="rounded-full object-cover"
                     />
                   ) : (

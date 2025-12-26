@@ -7,8 +7,13 @@ interface Post {
   body: string;
   status: string;
   createdAt: string;
-  updatedAt: string
+  updatedAt: string;
   plainText: string;
+  user?: {
+    id: string;
+    name: string;
+    image: string | null;
+  } | null;
 }
 
 interface LatestPostsSlice {
