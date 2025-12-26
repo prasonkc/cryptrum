@@ -16,11 +16,24 @@ const Profile = () => {
   return (
     <div className="w-full h-screen">
       <div className="max-w-[70%] p-10 my-10 rounded-2xl  bg-gray-950 m-auto">
-        <Avatar className="w-20 h-20 cursor-pointer">
-          <AvatarImage src={""} />
-          <Edit2 width={50} className="absolute" />
-          <AvatarFallback>{initial}</AvatarFallback>
-        </Avatar>
+        <div className="flex items-center gap-5">
+          <Avatar className="w-20 h-20 cursor-pointer" onClick={() => {console.log()}}>
+            <AvatarImage src={""} />
+            <AvatarFallback>{initial}</AvatarFallback>
+          </Avatar>
+          <div className="flex items-center gap-4 mb-6">
+            <span className="text-2xl font-bold text-white">{name}</span>
+            <button
+              className="p-2 rounded-full bg-gray-800 hover:bg-gray-700"
+              onClick={() => {
+                const name = prompt("Enter your new name")
+              }}
+              aria-label="Edit name"
+            >
+              <Edit2 size={20} />
+            </button>
+          </div>
+        </div>
 
         <div className="mt-8">
           <h2 className="text-xl font-semibold mb-4">Your Posts</h2>
