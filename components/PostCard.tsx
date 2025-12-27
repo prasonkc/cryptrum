@@ -41,7 +41,7 @@ const PostCard = ({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       className="w-full max-w-[700px]"
-      onClick={onClick ? onClick : undefined}
+      onClick={onClick}
     >
       <Card
         className={`
