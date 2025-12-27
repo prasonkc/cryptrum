@@ -5,12 +5,9 @@ import { auth } from "@/lib/auth";
 export async function DELETE(req: Request) {
   try {
     const session = await auth.api.getSession({ headers: req.headers });
-    
+
     if (!session || !session.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { searchParams } = new URL(req.url);
@@ -30,10 +27,7 @@ export async function DELETE(req: Request) {
     });
 
     if (!post) {
-      return NextResponse.json(
-        { error: "Post not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     if (post.userId !== session.user.id) {
@@ -60,4 +54,3 @@ export async function DELETE(req: Request) {
     );
   }
 }
-

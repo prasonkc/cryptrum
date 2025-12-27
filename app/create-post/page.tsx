@@ -5,11 +5,19 @@ import { authClient } from "@/lib/auth-client";
 import { Editor } from "@/components/blocks/editor-00/editor";
 import { SerializedEditorState } from "lexical";
 import { lexicalJsonToText } from "@/lib/lexicalToText";
+import { EditorState } from "lexical";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [editorState, setEditorState] = useState<SerializedEditorState | null>(null);
   const { data: session } = authClient.useSession();
+
+  const handleEditorChange = (state: EditorState) => {
+  state.read(() => {
+    const json = state.toJSON();
+    setEditorState(json);
+  });
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +49,7 @@ const CreatePost = () => {
           onChange={(e) => setTitle(e.target.value)}
           className="w-full border rounded p-2"
         />
-        <Editor onChange={setEditorState} />
+        <Editor onChange={handleEditorChange} />
         <button type="submit" className="px-4 py-2 bg-black text-white rounded">
           Create
         </button>
