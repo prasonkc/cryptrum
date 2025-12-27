@@ -72,7 +72,7 @@ const PostCard = ({
           </div>
 
           {/* Stats row */}
-          <motion.div
+          {/* <motion.div
             className="flex gap-4 mt-4 text-sm text-gray-500 dark:text-gray-400"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -90,10 +90,10 @@ const PostCard = ({
               <Clock className="w-4 h-4" />
               <span>5 min read</span>
             </div>
-          </motion.div>
+          </motion.div> */}
         </CardHeader>
 
-        <CardFooter className="flex gap-2 flex-wrap relative z-10">
+        {/* <CardFooter className="flex gap-2 flex-wrap relative z-10">
           {["React", "Next.js", "TypeScript"].map((tag, i) => (
             <motion.div
               key={tag}
@@ -112,7 +112,7 @@ const PostCard = ({
               </Badge>
             </motion.div>
           ))}
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </motion.div>
   );

@@ -10,11 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  const router = useRouter()
+  const router = useRouter();
 
   const [newPassword, setNewPassword] = useState("");
 
@@ -24,7 +25,7 @@ export default function ResetPasswordPage() {
     e.preventDefault();
 
     if (!token) {
-      dispatch(setError("Invalid Token!"))
+      dispatch(setError("Invalid Token!"));
       return;
     }
 
@@ -37,38 +38,40 @@ export default function ResetPasswordPage() {
       dispatch(setError(error.message as string));
     } else {
       alert("Password reset success");
-      router.push("/")
+      router.push("/");
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <form className={cn("grid items-center gap-6")}>
-        <div className="w-100 m-auto bg-gray-950 flex flex-col gap-5 p-10 rounded-3xl">
-          <h1 className="mx-auto font-extrabold text-2xl">
-            Reset Your Password
-          </h1>
-          <div className="grid gap-3">
-            <Input
-              id="password"
-              placeholder="Your New Password"
-              onChange={(e) => {
-                setNewPassword(e.target.value);
-              }}
-              className="w-[80%] mx-auto"
-            />
-          </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="min-h-screen flex items-center justify-center">
+        <form className={cn("grid items-center gap-6")}>
+          <div className="w-100 m-auto bg-gray-950 flex flex-col gap-5 p-10 rounded-3xl">
+            <h1 className="mx-auto font-extrabold text-2xl">
+              Reset Your Password
+            </h1>
+            <div className="grid gap-3">
+              <Input
+                id="password"
+                placeholder="Your New Password"
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                }}
+                className="w-[80%] mx-auto"
+              />
+            </div>
 
-          <Button
-            type="button"
-            variant="outline"
-            className="w-[40%] hover:scale-105 transition-all cursor-pointer mx-auto"
-            onClick={handleUpdate}
-          >
-            Set Password
-          </Button>
-        </div>
-      </form>
-    </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-[40%] hover:scale-105 transition-all cursor-pointer mx-auto"
+              onClick={handleUpdate}
+            >
+              Set Password
+            </Button>
+          </div>
+        </form>
+      </div>
+    </Suspense>
   );
 }
